@@ -1,0 +1,504 @@
+{
+	"404": {
+		"title": "Hittades inte"
+	},
+	"home": {
+		"welcomeNight": "Godnatt {username}!",
+		"welcomeMorning": "Godmorgon {username}!",
+		"welcomeDay": "Hej {username}!",
+		"welcomeEvening": "Godkväll {username}!",
+		"project": {
+			"import": "Importera din data till Vikunja"
+		}
+	},
+	"demo": {
+		"accountWillBeDeleted": "Ditt konto raderas, inklusive alla projekt, uppgifter och bilagor som du kan ha skapat."
+	},
+	"offline": {
+		"title": "Du är offline."
+	},
+	"user": {
+		"auth": {
+			"username": "Användarnamn",
+			"usernameEmail": "Användarnamn eller e-postadress",
+			"usernamePlaceholder": "t. ex. Frederick",
+			"email": "E-postadress",
+			"emailPlaceholder": "t. ex. frederic{'@'}vikunja.io",
+			"password": "Lösenord",
+			"passwordPlaceholder": "t. ex. •••••••••••",
+			"forgotPassword": "Har du glömt ditt lösenord?",
+			"resetPassword": "Återställ ditt lösenord",
+			"resetPasswordSuccess": "Kolla din inkorg! Du bör ha fått ett e-postmeddelande med instruktioner om hur du återställer ditt lösenord.",
+			"passwordsDontMatch": "Lösenorden matchar inte",
+			"totpTitle": "Tvåfaktorsautentiseringskod",
+			"totpPlaceholder": "t. ex. 123456",
+			"login": "Logga in",
+			"createAccount": "Skapa konto",
+			"loginWith": "Logga in med {provider}",
+			"authenticating": "Autentiserar…",
+			"logout": "Logga ut",
+			"emailInvalid": "Vänligen ange en giltig e-postadress.",
+			"usernameRequired": "Vänligen ange ett användarnamn.",
+			"passwordRequired": "Vänligen ange ett lösenord.",
+			"passwordNotMin": "Lösenord måste innehålla minst 8 tecken.",
+			"noAccountYet": "Har du inget konto än?",
+			"alreadyHaveAnAccount": "Har du redan ett konto?"
+		},
+		"settings": {
+			"title": "Inställningar",
+			"newPasswordTitle": "Uppdatera ditt lösenord",
+			"newPassword": "Nytt lösenord",
+			"currentPassword": "Nuvarande lösenord",
+			"currentPasswordPlaceholder": "Ditt nuvarande lösenord",
+			"updateEmailTitle": "Uppdatera din e-postadress",
+			"updateEmailNew": "Ny e-postadress",
+			"general": {
+				"name": "Mitt namn",
+				"discoverableByEmail": "Tillåt andra användare att lägga till mig som medlem i team eller projekt när de söker efter min fullständiga e-postadress",
+				"weekStartSunday": "Söndag",
+				"weekStartMonday": "Måndag",
+				"language": "Språk",
+				"timezone": "Tidzon"
+			},
+			"totp": {
+				"title": "Tvåfaktorsautentisering",
+				"enterPassword": "Vänligen ange ditt lösenord",
+				"disable": "Inaktivera tvåfaktorsautentisering"
+			},
+			"caldav": {
+				"title": "CalDAV",
+				"usernameIs": "Ditt användarnamn är: {0}"
+			},
+			"avatar": {
+				"title": "Avatar",
+				"initials": "Initialer",
+				"gravatar": "Gravatar",
+				"upload": "Ladda upp",
+				"uploadAvatar": "Ladda upp avatar"
+			},
+			"quickAddMagic": {
+				"vikunja": "Vikunja"
+			},
+			"appearance": {
+				"title": "Färgschema",
+				"colorScheme": {
+					"light": "Ljust",
+					"system": "System",
+					"dark": "Mörkt"
+				}
+			},
+			"apiTokens": {
+				"30d": "30 dagar",
+				"60d": "60 dagar",
+				"90d": "90 dagar",
+				"tokenCreatedNotSeeAgain": "Förvara den på en säker plats, du kommer aldrig att se den igen!"
+			}
+		},
+		"deletion": {
+			"title": "Radera ditt Vikunja-konto",
+			"text3": "För att fortsätta, tryck på knappen nedan. Du kommer att få ett e-postmeddelande med ytterligare instruktioner.",
+			"confirm": "Radera mitt konto",
+			"passwordRequired": "Vänligen ange ditt lösenord.",
+			"scheduledCancelSuccess": "Vi kommer inte radera ditt konto."
+		}
+	},
+	"project": {
+		"color": "Färg",
+		"projects": "Projekt",
+		"search": "Skriv för att söka efter ett projekt…",
+		"searchSelect": "Klicka eller tryck på enter för att välja detta projekt",
+		"shared": "Delade projekt",
+		"inboxTitle": "Inkorg",
+		"create": {
+			"header": "Nytt projekt",
+			"addTitleRequired": "Vänligen ange en titel."
+		},
+		"archive": {
+			"title": "Arkivera \"{project}\"",
+			"archive": "Arkivera detta projekt"
+		},
+		"background": {
+			"searchPlaceholder": "Sök efter en bakgrund…"
+		},
+		"delete": {
+			"title": "Radera \"{project}\"",
+			"header": "Radera detta projekt"
+		},
+		"duplicate": {
+			"title": "Duplicera detta projekt",
+			"label": "Duplicera"
+		},
+		"edit": {
+			"header": "Redigera detta projekt",
+			"title": "Redigera \"{project}\"",
+			"description": "Beskrivning",
+			"color": "Färg"
+		},
+		"share": {
+			"header": "Dela detta projekt",
+			"title": "Dela \"{project}\"",
+			"share": "Dela",
+			"links": {
+				"name": "Namn (valfritt)",
+				"namePlaceholder": "t. ex. Lorem Ipsum",
+				"password": "Lösenord (valfritt)",
+				"passwordExplanation": "Vid inloggning kommer användaren att bli ombedd att ange detta lösenord."
+			},
+			"userTeam": {
+				"typeUser": "användare | användare",
+				"you": "Du"
+			},
+			"attributes": {
+				"delete": "Radera"
+			}
+		},
+		"list": {
+			"add": "Lägg till",
+			"newTaskCta": "Skapa en uppgift.",
+			"editTask": "Redigera uppgift"
+		},
+		"gantt": {
+			"title": "Gantt",
+			"size": "Storlek",
+			"default": "Standard",
+			"month": "Månad",
+			"day": "Dag",
+			"hour": "Timme"
+		},
+		"table": {
+			"title": "Tabell",
+			"columns": "Kolumner"
+		},
+		"kanban": {
+			"addTask": "Lägg till en uppgift",
+			"addAnotherTask": "Lägg till ytterligare en uppgift"
+		},
+		"pseudo": {
+			"favorites": {
+				"title": "Favoriter"
+			}
+		},
+		"webhooks": {
+			"targetUrlInvalid": "Vänligen ange en giltig URL."
+		},
+		"views": {
+			"actions": "Åtgärder",
+			"create": "Skapa vy"
+		}
+	},
+	"filters": {
+		"title": "Filter",
+		"clear": "Rensa filter",
+		"showResults": "Visa resultat",
+		"attributes": {
+			"title": "Titel",
+			"description": "Beskrivning",
+			"sortAlphabetically": "Sortera alfabetiskt",
+			"enablePriority": "Aktivera filter efter prioritet"
+		},
+		"query": {
+			"help": {
+				"operators": {
+					"notEqual": "Inte lika med",
+					"equal": "Lika med",
+					"greaterThan": "Större än",
+					"greaterThanOrEqual": "Större än eller lika med",
+					"lessThan": "Mindre än",
+					"lessThanOrEqual": "Mindre än eller lika med"
+				}
+			}
+		}
+	},
+	"migrate": {
+		"title": "Importera från andra tjänster",
+		"titleService": "Importera din data från {name} till Vikunja",
+		"import": "Importera din data till Vikunja",
+		"getStarted": "Kom igång",
+		"upload": "Ladda upp fil"
+	},
+	"label": {
+		"title": "Etiketter",
+		"manage": "Hantera etiketter",
+		"newCTA": "Du har för närvarande inga etiketter.",
+		"search": "Skriv för att söka efter en etikett…",
+		"create": {
+			"header": "Ny etikett",
+			"titleRequired": "Vänligen ange en titel.",
+			"success": "Etiketten har skapats."
+		},
+		"edit": {
+			"header": "Redigera etikett",
+			"forbidden": "Du får inte redigera denna etikett eftersom du inte äger den."
+		},
+		"attributes": {
+			"title": "Titel",
+			"description": "Beskrivning",
+			"descriptionPlaceholder": "Etikettbeskrivning",
+			"color": "Färg"
+		}
+	},
+	"sharing": {
+		"authenticating": "Autentiserar…",
+		"invalidPassword": "Lösenordet är ogiltigt."
+	},
+	"navigation": {
+		"overview": "Översikt",
+		"upcoming": "Kommande",
+		"settings": "Inställningar",
+		"privacy": "Integritetspolicy"
+	},
+	"misc": {
+		"loading": "Laddar…",
+		"save": "Spara",
+		"delete": "Radera",
+		"confirm": "Bekräfta",
+		"cancel": "Avbryt",
+		"refresh": "Uppdatera",
+		"disable": "Inaktivera",
+		"copy": "Kopiera till urklipp",
+		"search": "Sök",
+		"searchPlaceholder": "Skriv för att söka…",
+		"previous": "Föregående",
+		"next": "Nästa",
+		"create": "Skapa",
+		"saving": "Sparar…",
+		"default": "Standard",
+		"close": "Stäng",
+		"download": "Ladda ner",
+		"forExample": "Till exempel:",
+		"welcomeBack": "Välkommen tillbaka!",
+		"actions": "Åtgärder"
+	},
+	"input": {
+		"resetColor": "Återställ färg",
+		"datepicker": {
+			"today": "I dag",
+			"tomorrow": "I morgon",
+			"nextMonday": "Nästa måndag",
+			"nextWeek": "Nästa vecka",
+			"chooseDate": "Välj ett datum"
+		},
+		"editor": {
+			"edit": "Redigera",
+			"bold": "Fetstil",
+			"italic": "Kursiv",
+			"strikethrough": "Genomstruken",
+			"code": "Kod",
+			"quote": "Citat",
+			"link": "Länk",
+			"image": "Bild",
+			"undo": "Ångra",
+			"table": {
+				"title": "Tabell",
+				"addColumnBefore": "Lägg till kolumn före",
+				"addColumnAfter": "Lägg till kolumn efter",
+				"deleteColumn": "Radera kolumn",
+				"addRowBefore": "Lägg till rad före",
+				"addRowAfter": "Lägg till rad efter",
+				"deleteRow": "Radera rad",
+				"deleteTable": "Radera tabell"
+			}
+		},
+		"multiselect": {
+			"createPlaceholder": "Skapa",
+			"selectPlaceholder": "Klicka eller tryck på enter för att välja"
+		},
+		"datepickerRange": {
+			"to": "Till",
+			"from": "Från",
+			"fromto": "{from} till {to}",
+			"date": "Datum",
+			"ranges": {
+				"today": "I dag",
+				"thisWeek": "Denna vecka",
+				"nextWeek": "Nästa vecka",
+				"lastWeek": "Förra veckan",
+				"thisMonth": "Denna månad",
+				"nextMonth": "Nästa månad",
+				"lastMonth": "Förra månaden"
+			},
+			"values": {
+				"now": "Nu"
+			}
+		},
+		"datemathHelp": {
+			"add1Day": "Lägg till en dag",
+			"minus1Day": "Subtrahera en dag",
+			"units": {
+				"seconds": "Sekunder",
+				"minutes": "Minuter",
+				"hours": "Timmar",
+				"days": "Dagar",
+				"weeks": "Veckor",
+				"months": "Månader",
+				"years": "År"
+			},
+			"examples": {
+				"now": "Just nu",
+				"today": "I dag kl. 00:00",
+				"in30Days": "Om 30 dagar"
+			}
+		}
+	},
+	"task": {
+		"task": "Uppgift",
+		"new": "Skapa en uppgift",
+		"addReminder": "Lägg till en påminnelse…",
+		"undo": "Ångra",
+		"checklistTotal": "{checked} av {total} uppgifter",
+		"checklistAllDone": "{total} uppgifter",
+		"show": {
+			"titleCurrent": "Aktuella uppgifter",
+			"titleDates": "Uppgifter från {from} till {to}",
+			"fromuntil": "Uppgifter från {from} till {until}",
+			"noTasks": "Det finns inget att göra - ha en bra dag!"
+		},
+		"detail": {
+			"move": "Flytta uppgift till ett annat projekt",
+			"done": "Markera uppgiften klar!",
+			"created": "Skapad {0} av {1}",
+			"organization": "Organisation",
+			"dateAndTime": "Datum och tid",
+			"delete": {
+				"header": "Radera denna uppgift"
+			},
+			"actions": {
+				"label": "Lägg till etiketter",
+				"priority": "Ange prioritet",
+				"dueDate": "Ange förfallodatum",
+				"attachments": "Lägg till bilagor",
+				"moveProject": "Flytta",
+				"delete": "Radera",
+				"favorite": "Lägg till i favoriter"
+			}
+		},
+		"attributes": {
+			"color": "Färg",
+			"description": "Beskrivning",
+			"labels": "Etiketter",
+			"reminders": "Påminnelser",
+			"repeat": "Upprepa",
+			"startDate": "Startdatum",
+			"title": "Titel"
+		},
+		"subscription": {
+			"subscribe": "Prenumerera",
+			"unsubscribe": "Avprenumerera"
+		},
+		"attachment": {
+			"title": "Bilagor",
+			"createdBy": "skapad {0} av {1}",
+			"upload": "Ladda upp bilaga",
+			"delete": "Radera bilaga",
+			"deleteTooltip": "Radera denna bilaga",
+			"copyUrl": "Kopiera URL"
+		},
+		"comment": {
+			"title": "Kommentarer",
+			"loading": "Laddar kommentarer…",
+			"deleteText1": "Är du säker på att du vill radera denna kommentar?"
+		},
+		"deferDueDate": {
+			"1day": "1 dag",
+			"3days": "3 dagar",
+			"1week": "1 vecka"
+		},
+		"label": {
+			"createPlaceholder": "Lägg till som ny etikett"
+		},
+		"priority": {
+			"low": "Låg",
+			"high": "Hög"
+		},
+		"reminder": {
+			"beforeShort": "före",
+			"afterShort": "efter",
+			"dateAndTime": "Datum och tid"
+		},
+		"repeat": {
+			"everyDay": "Varje dag",
+			"everyWeek": "Varje vecka",
+			"hours": "Timmar",
+			"days": "Dagar",
+			"weeks": "Veckor",
+			"months": "Månader",
+			"years": "År"
+		},
+		"quickAddMagic": {
+			"dateAndTime": "Datum och tid"
+		}
+	},
+	"team": {
+		"edit": {
+			"search": "Skriv för att söka efter en användare…",
+			"mustSelectUser": "Vänligen välj en användare.",
+			"leave": {
+				"title": "Lämna team"
+			}
+		},
+		"attributes": {
+			"description": "Beskrivning",
+			"member": "Medlem"
+		}
+	},
+	"keyboardShortcuts": {
+		"task": {
+			"delete": "Radera denna uppgift"
+		}
+	},
+	"update": {
+		"do": "Uppdatera nu"
+	},
+	"menu": {
+		"edit": "Redigera",
+		"archive": "Arkivera",
+		"duplicate": "Duplicera",
+		"delete": "Radera",
+		"share": "Dela",
+		"newProject": "Nytt projekt",
+		"createProject": "Skapa projekt"
+	},
+	"apiConfig": {
+		"urlPlaceholder": "t. ex. https://localhost:3456"
+	},
+	"loadingError": {
+		"tryAgain": "försök igen",
+		"contact": "kontakta oss"
+	},
+	"quickActions": {
+		"commands": "Kommandon",
+		"tasks": "Uppgifter",
+		"projects": "Projekt",
+		"labels": "Etiketter",
+		"createProject": "Skapa ett projekt",
+		"cmds": {
+			"newTask": "Ny uppgift",
+			"newProject": "Nytt projekt",
+			"newTeam": "Nytt team"
+		}
+	},
+	"reaction": {
+		"reactedWith": "{user} reagerade med {value}",
+		"reactedWithAnd": "{users} och {lastUser} reagerade med {value}",
+		"add": "Lägg till din reaktion"
+	},
+	"error": {
+		"1011": "Fel användarnamn eller lösenord.",
+		"8002": "Etiketten finns inte."
+	},
+	"about": {
+		"title": "Om",
+		"version": "Version: {version}"
+	},
+	"time": {
+		"units": {
+			"seconds": "sekund|sekunder",
+			"minutes": "minut|minuter",
+			"hours": "timme|timmar",
+			"days": "dag|dagar",
+			"weeks": "vecka|veckor",
+			"months": "månad|månader",
+			"years": "år|år"
+		}
+	}
+}
