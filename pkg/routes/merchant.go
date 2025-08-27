@@ -41,9 +41,10 @@ func registerMerchantRoutes(a *echo.Group) {
 	a.GET("/merchants/:merchant", merchantHandler.ReadOneWeb)
 	a.POST("/merchants/:merchant", merchantHandler.UpdateWeb)
 	a.DELETE("/merchants/:merchant", merchantHandler.DeleteWeb)
+	a.PUT("/merchants/import", merchantImport)
 }
 
-// MerchantImport handles XLSX import for merchants
+// merchantImport handles XLSX import for merchants
 // @Summary Import merchants from XLSX
 // @Description Import merchants from an uploaded XLSX file
 // @tags merchant
@@ -55,7 +56,7 @@ func registerMerchantRoutes(a *echo.Group) {
 // @Failure 400 {object} web.HTTPError "Invalid file format"
 // @Failure 500 {object} web.HTTPError "Internal server error"
 // @Router /merchants/import [put]
-func MerchantImport(c echo.Context) error {
+func merchantImport(c echo.Context) error {
 	// Get auth
 	auth, err := auth2.GetAuthFromClaims(c)
 	if err != nil {

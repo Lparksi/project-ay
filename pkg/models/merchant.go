@@ -216,26 +216,77 @@ func (m *Merchant) CanUpdate(s *xorm.Session, auth web.Auth) (bool, error) {
 	return m.checkPermission(s, auth.GetID(), PermissionWrite)
 }
 
+// FieldLabelMapping represents field-specific label mappings
+type FieldLabelMapping struct {
+	Field       string         `json:"field"`       // Field name (e.g., "validTime", "trafficConditions")
+	Mappings    []LabelMapping `json:"mappings"`    // Array of placeholder to label mappings for this field
+}
+
 // LabelMapping represents a mapping between a placeholder and a label
 type LabelMapping struct {
 	Placeholder string `json:"placeholder"`
 	LabelID     int64  `json:"labelId"`
 }
 
-// ApplyLabelReplacements applies label replacements to merchant fields
+// ApplyLabelReplacements applies field-specific label replacements to merchant fields
 func (m *Merchant) ApplyLabelReplacements(s *xorm.Session) error {
 	if m.CustomFilters == "" {
 		return nil
 	}
 
-	// Parse label mappings from CustomFilters
-	var mappings []LabelMapping
-	err := json.Unmarshal([]byte(m.CustomFilters), &mappings)
+	// Try to parse as new field-specific format first
+	var fieldMappings []FieldLabelMapping
+	err := json.Unmarshal([]byte(m.CustomFilters), &fieldMappings)
 	if err != nil {
-		// If parsing fails, just return without error
+		// If new format fails, try legacy format for backward compatibility
+		var legacyMappings []LabelMapping
+		err = json.Unmarshal([]byte(m.CustomFilters), &legacyMappings)
+		if err != nil {
+			// If both formats fail, just return without error
+			return nil
+		}
+		// Apply legacy format (same mappings to all fields)
+		m.applyLegacyLabelReplacements(s, legacyMappings)
 		return nil
 	}
 
+	// Apply field-specific mappings
+	for _, fieldMapping := range fieldMappings {
+		// Build replacement map for this field
+		replacements := make(map[string]string)
+		for _, mapping := range fieldMapping.Mappings {
+			if mapping.Placeholder == "" || mapping.LabelID == 0 {
+				continue
+			}
+
+			// Get label by ID
+			label := &Label{}
+			exists, err := s.Where("id = ?", mapping.LabelID).Get(label)
+			if err != nil || !exists {
+				continue
+			}
+
+			replacements[mapping.Placeholder] = label.Title
+		}
+
+		// Apply replacements to the specific field
+		switch fieldMapping.Field {
+		case "validTime":
+			m.ValidTime = applyReplacements(m.ValidTime, replacements)
+		case "trafficConditions":
+			m.TrafficConditions = applyReplacements(m.TrafficConditions, replacements)
+		case "fixedEvents":
+			m.FixedEvents = applyReplacements(m.FixedEvents, replacements)
+		case "specialTimePeriods":
+			m.SpecialTimePeriods = applyReplacements(m.SpecialTimePeriods, replacements)
+		}
+	}
+
+	return nil
+}
+
+// applyLegacyLabelReplacements applies legacy format (same mappings to all fields)
+func (m *Merchant) applyLegacyLabelReplacements(s *xorm.Session, mappings []LabelMapping) {
 	// Build replacement map from placeholder to label title
 	replacements := make(map[string]string)
 	for _, mapping := range mappings {
@@ -253,13 +304,11 @@ func (m *Merchant) ApplyLabelReplacements(s *xorm.Session) error {
 		replacements[mapping.Placeholder] = label.Title
 	}
 
-	// Apply replacements to relevant fields
+	// Apply replacements to relevant fields (legacy behavior)
 	m.ValidTime = applyReplacements(m.ValidTime, replacements)
 	m.TrafficConditions = applyReplacements(m.TrafficConditions, replacements)
 	m.FixedEvents = applyReplacements(m.FixedEvents, replacements)
 	m.SpecialTimePeriods = applyReplacements(m.SpecialTimePeriods, replacements)
-
-	return nil
 }
 
 // applyReplacements applies a set of string replacements to a text

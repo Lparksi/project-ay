@@ -496,7 +496,6 @@ func registerAPIRoutes(a *echo.Group) {
 
 	// Merchant routes
 	registerMerchantRoutes(a)
-	a.PUT("/merchants/import", MerchantImport)
 
 	projectTeamHandler := &handler.WebHandler{
 		EmptyStruct: func() handler.CObject {
