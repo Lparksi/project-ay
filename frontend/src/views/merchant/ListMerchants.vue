@@ -485,7 +485,6 @@ async function importMerchants() {
 	}
 }
 </script>
-</script>
 
 <style scoped lang="scss">
 .merchant-overview {
