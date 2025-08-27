@@ -17,8 +17,10 @@
 package routes
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"code.vikunja.io/api/pkg/db"
 	"code.vikunja.io/api/pkg/models"
@@ -70,8 +72,13 @@ func merchantImport(c echo.Context) error {
 	// Get uploaded file
 	file, err := c.FormFile("file")
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]string{"error": "No file uploaded"})
+		// Log the actual error for debugging
+		fmt.Printf("Error getting form file: %v\n", err)
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "No file uploaded: " + err.Error()})
 	}
+
+	// Log file information
+	fmt.Printf("Received file: %s, Size: %d, Header: %v\n", file.Filename, file.Size, file.Header)
 
 	// Open the uploaded file
 	src, err := file.Open()
@@ -83,7 +90,8 @@ func merchantImport(c echo.Context) error {
 	// Read Excel file
 	xlsx, err := excelize.OpenReader(src)
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid XLSX file"})
+		fmt.Printf("Error opening Excel file: %v\n", err)
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid XLSX file: " + err.Error()})
 	}
 	defer xlsx.Close()
 
@@ -95,61 +103,93 @@ func merchantImport(c echo.Context) error {
 
 	rows, err := xlsx.GetRows(sheets[0])
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Could not read sheet data"})
+		fmt.Printf("Error reading sheet data: %v\n", err)
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Could not read sheet data: " + err.Error()})
+	}
+
+	fmt.Printf("Found %d rows in Excel file\n", len(rows))
+	if len(rows) > 0 {
+		fmt.Printf("First row (header): %v\n", rows[0])
 	}
 
 	if len(rows) < 2 {
-		return c.JSON(http.StatusBadRequest, map[string]string{"error": "XLSX file must have header row and at least one data row"})
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "XLSX file must have header row and at least one data row. Found " + strconv.Itoa(len(rows)) + " rows."})
 	}
 
-	// Assume first row is header
-	// Expected columns: Title, LegalRepresentative, BusinessAddress, BusinessDistrict, ValidTime, 
-	//                  TrafficConditions, FixedEvents, TerminalType, SpecialTimePeriods, CustomFilters
+	// Parse header row
+	header := rows[0]
+	expectedHeaders := []string{"法人", "经营地址", "商圈", "有效时间", "交通情况", "固定事件", "终端类型", "特殊时段", "自定义筛选"}
+	
+	// Create a map of header positions
+	headerMap := make(map[string]int)
+	for i, h := range header {
+		// Normalize header by trimming spaces
+		normalizedHeader := strings.TrimSpace(h)
+		headerMap[normalizedHeader] = i
+	}
+
+	// Check if all required headers are present
+	for _, expected := range expectedHeaders {
+		if _, exists := headerMap[expected]; !exists {
+			return c.JSON(http.StatusBadRequest, map[string]string{
+				"error": fmt.Sprintf("Missing required header column: %s", expected),
+			})
+		}
+	}
+
+	// Import merchants
 	var importedMerchants []*models.Merchant
 
 	for i, row := range rows[1:] { // Skip header row
-		if len(row) < 1 {
+		if len(row) == 0 {
 			continue // Skip empty rows
 		}
 
+		// Create merchant with required fields
 		merchant := &models.Merchant{
 			OwnerID: auth.GetID(),
 		}
 
-		// Map columns to merchant fields
-		if len(row) > 0 {
-			merchant.Title = row[0]
+		// Map columns to merchant fields based on header positions
+		if pos, exists := headerMap["法人"]; exists && pos < len(row) {
+			merchant.LegalRepresentative = row[pos]
 		}
-		if len(row) > 1 {
-			merchant.LegalRepresentative = row[1]
+		if pos, exists := headerMap["经营地址"]; exists && pos < len(row) {
+			merchant.BusinessAddress = row[pos]
 		}
-		if len(row) > 2 {
-			merchant.BusinessAddress = row[2]
+		if pos, exists := headerMap["商圈"]; exists && pos < len(row) {
+			merchant.BusinessDistrict = row[pos]
 		}
-		if len(row) > 3 {
-			merchant.BusinessDistrict = row[3]
+		if pos, exists := headerMap["有效时间"]; exists && pos < len(row) {
+			merchant.ValidTime = row[pos]
 		}
-		if len(row) > 4 {
-			merchant.ValidTime = row[4]
+		if pos, exists := headerMap["交通情况"]; exists && pos < len(row) {
+			merchant.TrafficConditions = row[pos]
 		}
-		if len(row) > 5 {
-			merchant.TrafficConditions = row[5]
+		if pos, exists := headerMap["固定事件"]; exists && pos < len(row) {
+			merchant.FixedEvents = row[pos]
 		}
-		if len(row) > 6 {
-			merchant.FixedEvents = row[6]
+		if pos, exists := headerMap["终端类型"]; exists && pos < len(row) {
+			merchant.TerminalType = row[pos]
 		}
-		if len(row) > 7 {
-			merchant.TerminalType = row[7]
+		if pos, exists := headerMap["特殊时段"]; exists && pos < len(row) {
+			merchant.SpecialTimePeriods = row[pos]
 		}
-		if len(row) > 8 {
-			merchant.SpecialTimePeriods = row[8]
-		}
-		if len(row) > 9 {
-			merchant.CustomFilters = row[9]
+		if pos, exists := headerMap["自定义筛选"]; exists && pos < len(row) {
+			merchant.CustomFilters = row[pos]
 		}
 
-		// Skip if no title (required field)
-		if merchant.Title == "" {
+		// Set title as a combination of key fields or use a default
+		title := merchant.LegalRepresentative
+		if title == "" {
+			title = fmt.Sprintf("商户 #%d", i+1)
+		}
+		merchant.Title = title
+
+		// Skip if all fields are empty
+		if merchant.LegalRepresentative == "" && 
+		   merchant.BusinessAddress == "" && 
+		   merchant.BusinessDistrict == "" {
 			continue
 		}
 

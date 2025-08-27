@@ -604,9 +604,10 @@
     },
     "import": {
       "title": "Import Merchants",
-      "description": "Import merchant data from XLSX file",
+      "description": "Import merchant data from XLSX file. Please select an Excel file (.xlsx or .xls) containing merchant information.",
       "success": "Successfully imported {count} merchants",
-      "noFileSelected": "Please select a file to import"
+      "noFileSelected": "Please select a file to import",
+      "selectedFile": "Selected file"
     },
     "attributes": {
       "title": "Merchant Name",
@@ -628,7 +629,23 @@
       "selectLabel": "Select Label",
       "add": "Add Mapping",
       "help": "Configure placeholder to label mappings for automatic replacement in fields like valid time"
-    }
+    },
+    "search": {
+      "placeholder": "Search merchants..."
+    },
+    "filter": {
+      "allDistricts": "All Districts",
+      "allTerminalTypes": "All Terminal Types"
+    },
+    "selected": "Selected {count} merchants",
+    "bulkDelete": "Delete Selected",
+    "bulkDelete": {
+      "title": "Delete Multiple Merchants",
+      "text1": "Are you sure you want to delete {count} merchants?",
+      "text2": "This action cannot be undone.",
+      "success": "Successfully deleted {count} merchants"
+    },
+    "useInTask": "Use in Task"
   },
   "sharing": {
     "authenticating": "Authenticating…",
@@ -639,7 +656,7 @@
   "navigation": {
     "overview": "Overview",
     "upcoming": "Upcoming",
-  "map": "Map",
+    "map": "Map",
     "settings": "Settings",
     "imprint": "Imprint",
     "privacy": "Privacy Policy"
@@ -676,6 +693,13 @@
     "created": "Created at",
     "createdBy": "Created by {0}",
     "actions": "Actions",
+    "back": "Back",
+    "edit": "Edit",
+    "remove": "Remove",
+    "clearFilters": "Clear Filters",
+    "clearSelection": "Clear Selection",
+    "page": "Page",
+    "of": "of",
     "cannotBeUndone": "This cannot be undone!",
     "avatarOfUser": "{user}'s profile image"
   },

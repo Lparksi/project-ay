@@ -377,12 +377,12 @@ const router = createRouter({
 		},
 		{
 			path: '/merchants/new',
-			name: 'merchant.create',
+			name: 'merchants.create',
 			component: () => import('@/views/merchant/MerchantEdit.vue'),
 		},
 		{
 			path: '/merchants/:id/edit',
-			name: 'merchant.edit',
+			name: 'merchants.edit',
 			component: () => import('@/views/merchant/MerchantEdit.vue'),
 			props: route => ({ id: Number(route.params.id as string) }),
 		},

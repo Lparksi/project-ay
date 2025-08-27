@@ -243,18 +243,26 @@ const isEdit = computed(() => !!route.params.id)
 
 onMounted(async () => {
 	await loadLabels()
-	
+
 	if (isEdit.value) {
 		await loadMerchant()
 	}
 })
 
+function normalizeResponseData<T = any>(res: any): T | null {
+	if (res == null) return null
+	if (res.data !== undefined) return res.data
+	return res as T
+}
+
 async function loadLabels() {
 	try {
 		const response = await labelService.getAll()
-		availableLabels.value = response.data
+		const data = normalizeResponseData<any[]>(response) ?? []
+		availableLabels.value = Array.isArray(data) ? data : []
 	} catch (e) {
 		error(e)
+		availableLabels.value = []
 	}
 }
 
@@ -262,20 +270,33 @@ async function loadMerchant() {
 	if (!route.params.id) return
 
 	try {
-		const merchantData = await merchantService.get(Number(route.params.id))
-		merchant.value = merchantData
+		// Create a temporary model with the ID for the API call
+		const tempModel = new MerchantModel({ id: Number(route.params.id) })
+		const fetched = await merchantService.get(tempModel)
+		if (fetched) {
+			// merge into model to preserve defaults
+			merchant.value = Object.assign(new MerchantModel(), fetched)
+		}
 
-		// Parse existing label mappings from customFilters
-		if (merchant.value.customFilters) {
+		// Parse existing label mappings from customFilters (defensive)
+		const cf = merchant.value?.customFilters ?? ''
+		if (cf) {
 			try {
-				const parsedMappings = JSON.parse(merchant.value.customFilters)
-				if (Array.isArray(parsedMappings)) {
-					labelMappings.value = parsedMappings
+				const parsed = JSON.parse(cf)
+				if (Array.isArray(parsed)) {
+					// normalize entries
+					labelMappings.value = parsed.map((m: any) => ({
+						placeholder: m?.placeholder ?? '',
+						labelId: m?.labelId ?? ''
+					}))
+				} else {
+					labelMappings.value = []
 				}
 			} catch (e) {
-				// If parsing fails, start with empty mappings
 				labelMappings.value = []
 			}
+		} else {
+			labelMappings.value = []
 		}
 	} catch (e) {
 		error(e)
@@ -284,22 +305,19 @@ async function loadMerchant() {
 
 async function saveMerchant() {
 	loading.value = true
-	
-	try {
-		// Save label mappings to customFilters
-		merchant.value.customFilters = JSON.stringify(labelMappings.value)
 
-		let savedMerchant
+	try {
+		// Ensure labelMappings is an array
+		merchant.value.customFilters = JSON.stringify(labelMappings.value ?? [])
+
 		if (isEdit.value) {
-			savedMerchant = await merchantService.update(merchant.value)
+			await merchantService.update(merchant.value)
 		} else {
-			savedMerchant = await merchantService.create(merchant.value)
+			await merchantService.create(merchant.value)
 		}
 
 		success({
-			message: isEdit.value 
-				? t('merchant.edit.success') 
-				: t('merchant.create.success')
+			message: isEdit.value ? t('merchant.edit.success') : t('merchant.create.success')
 		})
 
 		router.push({name: 'merchants.index'})
@@ -311,13 +329,12 @@ async function saveMerchant() {
 }
 
 function addLabelMapping() {
-	labelMappings.value.push({
-		placeholder: '',
-		labelId: ''
-	})
+	if (!Array.isArray(labelMappings.value)) labelMappings.value = []
+	labelMappings.value.push({placeholder: '', labelId: ''})
 }
 
 function removeLabelMapping(index: number) {
+	if (!Array.isArray(labelMappings.value)) return
 	labelMappings.value.splice(index, 1)
 }
 </script>

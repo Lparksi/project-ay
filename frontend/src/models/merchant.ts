@@ -17,9 +17,9 @@ export default class MerchantModel extends AbstractModel<IMerchant> implements I
 	specialTimePeriods = ''
 	customFilters = ''
 
-	owner: IUser = UserModel
-	created: Date = null
-	updated: Date = null
+	owner: IUser = new UserModel()
+	created: Date = new Date()
+	updated: Date = new Date()
 
 	constructor(data: Partial<IMerchant> = {}) {
 		super()
@@ -27,7 +27,11 @@ export default class MerchantModel extends AbstractModel<IMerchant> implements I
 
 		this.owner = new UserModel(this.owner)
 
-		this.created = new Date(this.created)
-		this.updated = new Date(this.updated)
+		if (this.created) {
+			this.created = new Date(this.created)
+		}
+		if (this.updated) {
+			this.updated = new Date(this.updated)
+		}
 	}
 }

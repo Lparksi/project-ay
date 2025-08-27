@@ -83,7 +83,7 @@ export default abstract class AbstractService<Model extends IAbstract = IAbstrac
 					}
 					break
 				case 'put':
-					if (this.useCreateInterceptor()) {
+					if (this.useCreateInterceptor() && !(config.data instanceof FormData)) {
 						config.data = this.beforeCreate(config.data)
 						if(this.autoTransformBeforePut()) {
 							config.data = objectToSnakeCase(config.data)
@@ -474,13 +474,7 @@ export default abstract class AbstractService<Model extends IAbstract = IAbstrac
 				url,
 				formData,
 				{
-					headers: {
-						'Content-Type':
-							'multipart/form-data; boundary=' + formData._boundary,
-					},
-					// fix upload issue after upgrading to axios to 1.0.0
-					// see: https://github.com/axios/axios/issues/4885#issuecomment-1222419132
-					transformRequest: formData => formData,
+					transformRequest: formData => formData, // 关键配置
 					onUploadProgress: ({progress}) => {
 						this.uploadProgress = progress? Math.round((progress * 100)) : 0
 					},

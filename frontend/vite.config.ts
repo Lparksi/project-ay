@@ -142,6 +142,9 @@ function getBuildConfig(env: Record<string, string>) {
 				filename: 'sw.ts',
 				strategies: 'injectManifest',
 				injectRegister: false,
+				injectManifest: {
+					maximumFileSizeToCacheInBytes: 3 * 1024 * 1024, // 3MB limit instead of default 2MB
+				},
 				manifest: {
 					name: 'Vikunja',
 					short_name: 'Vikunja',
@@ -218,6 +221,8 @@ function getBuildConfig(env: Record<string, string>) {
 			manualChunks: {
 				// by putting tracking related stuff in a separated file we try to prevent unwanted blocking from ad-blockers
 				sentry: ['./src/sentry.ts', '@sentry/vue', '@sentry/tracing'],
+				// separate TDesign into its own chunk to reduce main bundle size
+				tdesign: ['tdesign-vue-next'],
 			},
 		},
 		build: {
