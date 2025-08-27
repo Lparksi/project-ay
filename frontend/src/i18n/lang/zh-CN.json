@@ -494,6 +494,53 @@
 			"color": "标签颜色"
 		}
 	},
+	"merchant": {
+		"title": "商户管理",
+		"description": "管理商户信息，包括法人、地址、商圈等业务信息。",
+		"create": {
+			"title": "新建商户",
+			"description": "创建新的商户信息",
+			"success": "商户创建成功"
+		},
+		"edit": {
+			"title": "编辑商户",
+			"description": "修改商户信息",
+			"success": "商户信息更新成功"
+		},
+		"delete": {
+			"title": "删除商户",
+			"text1": "您确定要删除商户 '{merchant}' 吗？",
+			"text2": "此操作无法撤销。",
+			"success": "商户删除成功"
+		},
+		"import": {
+			"title": "导入商户",
+			"description": "从 XLSX 文件导入商户信息",
+			"success": "成功导入 {count} 个商户",
+			"noFileSelected": "请选择要导入的文件"
+		},
+		"attributes": {
+			"title": "商户名称",
+			"legalRepresentative": "法人",
+			"businessAddress": "经营地址",
+			"businessDistrict": "商圈",
+			"validTime": "有效时间",
+			"validTimeHelp": "可使用标签替换，如：A/B/C 等",
+			"trafficConditions": "交通情况",
+			"fixedEvents": "固定事件",
+			"terminalType": "终端类型",
+			"specialTimePeriods": "特殊时段",
+			"customFilters": "自定义筛选",
+			"customFiltersHelp": "JSON格式的自定义筛选配置"
+		},
+		"labelReplacement": {
+			"title": "标签替换配置",
+			"placeholder": "占位符（如：A、B、C）",
+			"selectLabel": "选择标签",
+			"add": "添加映射",
+			"help": "配置占位符与标签的映射关系，用于在有效时间等字段中自动替换"
+		}
+	},
 	"sharing": {
 		"authenticating": "验证中……",
 		"passwordRequired": "此共享项目需要密码。请在下面输入：",

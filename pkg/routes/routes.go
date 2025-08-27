@@ -494,6 +494,10 @@ func registerAPIRoutes(a *echo.Group) {
 	a.DELETE("/labels/:label", labelHandler.DeleteWeb)
 	a.POST("/labels/:label", labelHandler.UpdateWeb)
 
+	// Merchant routes
+	registerMerchantRoutes(a)
+	a.PUT("/merchants/import", MerchantImport)
+
 	projectTeamHandler := &handler.WebHandler{
 		EmptyStruct: func() handler.CObject {
 			return &models.TeamProject{}

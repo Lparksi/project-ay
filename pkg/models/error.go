@@ -2043,3 +2043,30 @@ type ErrOpenIDBadRequestWithDetails struct {
 func (err *ErrOpenIDBadRequestWithDetails) Error() string {
 	return err.Message
 }
+
+// ========
+// Merchant
+// ========
+
+// ErrMerchantDoesNotExist represents a "MerchantDoesNotExist" kind of error. Used if the merchant does not exist.
+type ErrMerchantDoesNotExist struct {
+	MerchantID int64
+}
+
+// IsErrMerchantDoesNotExist checks if an error is a ErrMerchantDoesNotExist.
+func IsErrMerchantDoesNotExist(err error) bool {
+	_, ok := err.(ErrMerchantDoesNotExist)
+	return ok
+}
+
+func (err ErrMerchantDoesNotExist) Error() string {
+	return fmt.Sprintf("Merchant does not exist [Merchant ID: %d]", err.MerchantID)
+}
+
+// ErrCodeMerchantDoesNotExist holds the unique world-error code of this error
+const ErrCodeMerchantDoesNotExist = 6001
+
+// HTTPError holds the http error description
+func (err ErrMerchantDoesNotExist) HTTPError() web.HTTPError {
+	return web.HTTPError{HTTPCode: http.StatusNotFound, Code: ErrCodeMerchantDoesNotExist, Message: "The merchant does not exist."}
+}

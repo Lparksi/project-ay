@@ -583,6 +583,53 @@
       "color": "Color"
     }
   },
+  "merchant": {
+    "title": "Merchant Management",
+    "description": "Manage merchant information including legal representative, address, business district and other business details.",
+    "create": {
+      "title": "New Merchant",
+      "description": "Create a new merchant record",
+      "success": "Merchant created successfully"
+    },
+    "edit": {
+      "title": "Edit Merchant",
+      "description": "Modify merchant information",
+      "success": "Merchant updated successfully"
+    },
+    "delete": {
+      "title": "Delete Merchant",
+      "text1": "Are you sure you want to delete merchant '{merchant}'?",
+      "text2": "This action cannot be undone.",
+      "success": "Merchant deleted successfully"
+    },
+    "import": {
+      "title": "Import Merchants",
+      "description": "Import merchant data from XLSX file",
+      "success": "Successfully imported {count} merchants",
+      "noFileSelected": "Please select a file to import"
+    },
+    "attributes": {
+      "title": "Merchant Name",
+      "legalRepresentative": "Legal Representative",
+      "businessAddress": "Business Address",
+      "businessDistrict": "Business District",
+      "validTime": "Valid Time",
+      "validTimeHelp": "Support label replacement, e.g.: A/B/C etc.",
+      "trafficConditions": "Traffic Conditions",
+      "fixedEvents": "Fixed Events",
+      "terminalType": "Terminal Type",
+      "specialTimePeriods": "Special Time Periods",
+      "customFilters": "Custom Filters",
+      "customFiltersHelp": "JSON format custom filter configuration"
+    },
+    "labelReplacement": {
+      "title": "Label Replacement Configuration",
+      "placeholder": "Placeholder (e.g.: A, B, C)",
+      "selectLabel": "Select Label",
+      "add": "Add Mapping",
+      "help": "Configure placeholder to label mappings for automatic replacement in fields like valid time"
+    }
+  },
   "sharing": {
     "authenticating": "Authenticating…",
     "passwordRequired": "This shared project requires a password. Please enter it below:",
