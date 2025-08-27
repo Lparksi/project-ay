@@ -70,6 +70,16 @@
 						{{ $t('team.title') }}
 					</RouterLink>
 				</li>
+				<li>
+					<RouterLink
+						:to="{ name: 'map' }"
+					>
+						<span class="menu-item-icon icon">
+							<Icon icon="map" />
+						</span>
+						{{ $t('navigation.map') }}
+					</RouterLink>
+				</li>
 			</menu>
 		</nav>
 

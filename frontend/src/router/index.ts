@@ -388,6 +388,11 @@ const router = createRouter({
 			name: 'about',
 			component: () => import('@/views/About.vue'),
 		},
+		{
+			path: '/map',
+			name: 'map',
+			component: () => import('@/views/Map.vue'),
+		},
 	],
 })
 

@@ -9,7 +9,7 @@ ENV CYPRESS_INSTALL_BINARY=0
 
 COPY frontend/pnpm-lock.yaml frontend/package.json frontend/.npmrc ./ 
 COPY frontend/patches ./patches
-RUN npm install -g corepack && corepack enable && \
+RUN --mount=type=cache,id=pnpm-cache,target=/build/.cache/pnpm npm install -g corepack && corepack enable && \
     pnpm install --frozen-lockfile
 COPY frontend/ ./
 ARG RELEASE_VERSION=dev
@@ -21,6 +21,14 @@ RUN go install github.com/magefile/mage@latest && \
     mv /go/bin/mage /usr/local/go/bin
 
 WORKDIR /go/src/code.vikunja.io/api
+COPY go.mod go.sum ./
+# Download modules first and cache them (BuildKit cache mount)
+RUN --mount=type=cache,id=go-mod-cache,target=/go/pkg/mod \
+    export PATH=$PATH:$GOPATH/bin && \
+    go env -w GOPROXY=https://proxy.golang.org && \
+    go mod download
+
+# Copy rest of repository
 COPY . ./
 COPY --from=frontendbuilder /build/dist ./frontend/dist
 
@@ -31,19 +39,8 @@ RUN export PATH=$PATH:$GOPATH/bin && \
 	mage build:clean && \
     mage release:xgo "${TARGETOS}/${TARGETARCH}/${TARGETVARIANT}"
 
-#  ┬─┐┬ ┐┌┐┐┌┐┐┬─┐┬─┐
-#  │┬┘│ │││││││├─ │┬┘
-#  ┘└┘┘─┘┘└┘┘└┘┴─┘┘└┘
-
-# The actual image
 FROM scratch
 
-LABEL org.opencontainers.image.authors='maintainers@vikunja.io'
-LABEL org.opencontainers.image.url='https://vikunja.io'
-LABEL org.opencontainers.image.documentation='https://vikunja.io/docs'
-LABEL org.opencontainers.image.source='https://code.vikunja.io/vikunja'
-LABEL org.opencontainers.image.licenses='AGPLv3'
-LABEL org.opencontainers.image.title='Vikunja'
 
 WORKDIR /app/vikunja
 ENTRYPOINT [ "/app/vikunja/vikunja" ]
