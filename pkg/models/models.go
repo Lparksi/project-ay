@@ -66,6 +66,9 @@ func GetTables() []interface{} {
 		&TaskPosition{},
 		&TaskBucket{},
 		&Merchant{},
+		&MerchantTag{},
+		&MerchantMerchantTag{},
+		&GeoPoint{},
 	}
 }
 

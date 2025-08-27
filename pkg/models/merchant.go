@@ -52,6 +52,18 @@ type Merchant struct {
 	// Custom filter properties as JSON.
 	CustomFilters string `xorm:"longtext null" json:"custom_filters"`
 
+	// Geographic coordinates (longitude, latitude).
+	Longitude float64 `xorm:"decimal(10,7) null" json:"longitude"`
+	Latitude  float64 `xorm:"decimal(10,7) null" json:"latitude"`
+	// Geocoding accuracy score (0.0 to 1.0).
+	GeocodeAccuracy float64 `xorm:"decimal(3,2) default 0.0" json:"geocode_accuracy"`
+	// Formatted address from geocoding service.
+	GeocodeAddress string `xorm:"varchar(500) null" json:"geocode_address"`
+	// Geocoding service used.
+	GeocodeService string `xorm:"varchar(50) null" json:"geocode_service"`
+	// Whether coordinates were manually set.
+	IsManualLocation bool `xorm:"bool default false" json:"is_manual_location"`
+
 	// A timestamp when this merchant was created. You cannot change this value.
 	Created time.Time `xorm:"created not null" json:"created"`
 	// A timestamp when this merchant was last updated. You cannot change this value.
@@ -62,6 +74,13 @@ type Merchant struct {
 
 	// The user id of the user who created this merchant.
 	OwnerID int64 `xorm:"bigint not null INDEX" json:"-"`
+
+	// Associated tags (loaded separately).
+	Tags []*MerchantTag `xorm:"-" json:"tags,omitempty"`
+	// Primary geo point (loaded separately).
+	PrimaryGeoPoint *GeoPoint `xorm:"-" json:"primary_geo_point,omitempty"`
+	// All geo points (loaded separately).
+	GeoPoints []*GeoPoint `xorm:"-" json:"geo_points,omitempty"`
 
 	web.CRUDable `xorm:"-" json:"-"`
 }
@@ -103,6 +122,18 @@ func (m *Merchant) ReadOne(s *xorm.Session, auth web.Auth) (err error) {
 
 	m.Owner, _ = user.GetUserByID(s, m.OwnerID)
 
+	// Load associated tags
+	err = m.LoadTags(s)
+	if err != nil {
+		return err
+	}
+
+	// Load primary geo point
+	err = m.LoadPrimaryGeoPoint(s)
+	if err != nil {
+		return err
+	}
+
 	// Apply label replacements
 	err = m.ApplyLabelReplacements(s)
 	if err != nil {
@@ -135,9 +166,16 @@ func (m *Merchant) ReadAll(s *xorm.Session, auth web.Auth, search string, page i
 		return nil, 0, 0, err
 	}
 
-	// Load owners and apply label replacements
+	// Load owners, tags, geo points and apply label replacements
 	for _, merchant := range merchants {
 		merchant.Owner, _ = user.GetUserByID(s, merchant.OwnerID)
+		
+		// Load associated tags
+		merchant.LoadTags(s)
+		
+		// Load primary geo point
+		merchant.LoadPrimaryGeoPoint(s)
+		
 		// Apply label replacements
 		merchant.ApplyLabelReplacements(s)
 	}
@@ -335,4 +373,118 @@ func (m *Merchant) checkPermission(s *xorm.Session, userID int64, permission Per
 	}
 
 	return false, nil
+}
+
+// LoadTags loads the associated tags for this merchant
+func (m *Merchant) LoadTags(s *xorm.Session) error {
+	tags, err := GetMerchantTagsByMerchantID(s, m.ID)
+	if err != nil {
+		return err
+	}
+	m.Tags = tags
+	return nil
+}
+
+// LoadGeoPoints loads all geo points for this merchant
+func (m *Merchant) LoadGeoPoints(s *xorm.Session) error {
+	geoPoints, err := GetGeoPointsByMerchantID(s, m.ID)
+	if err != nil {
+		return err
+	}
+	m.GeoPoints = geoPoints
+	
+	// Set primary geo point
+	for _, gp := range geoPoints {
+		if gp.IsPrimary {
+			m.PrimaryGeoPoint = gp
+			break
+		}
+	}
+	
+	return nil
+}
+
+// LoadPrimaryGeoPoint loads only the primary geo point for this merchant
+func (m *Merchant) LoadPrimaryGeoPoint(s *xorm.Session) error {
+	geoPoint, err := GetPrimaryGeoPointByMerchantID(s, m.ID)
+	if err != nil && !IsErrGeoPointDoesNotExist(err) {
+		return err
+	}
+	if geoPoint != nil {
+		m.PrimaryGeoPoint = geoPoint
+	}
+	return nil
+}
+
+// SetTags associates this merchant with the given tag IDs
+func (m *Merchant) SetTags(s *xorm.Session, tagIDs []int64) error {
+	return AssociateMerchantWithTags(s, m.ID, tagIDs)
+}
+
+// HasLocation checks if the merchant has valid coordinates
+func (m *Merchant) HasLocation() bool {
+	return m.Longitude != 0 && m.Latitude != 0 &&
+		m.Longitude >= -180 && m.Longitude <= 180 &&
+		m.Latitude >= -90 && m.Latitude <= 90
+}
+
+// GetDistance calculates the distance to another merchant in kilometers
+func (m *Merchant) GetDistance(other *Merchant) float64 {
+	if !m.HasLocation() || !other.HasLocation() {
+		return 0
+	}
+	return CalculateDistance(m.Longitude, m.Latitude, other.Longitude, other.Latitude)
+}
+
+// UpdateLocation updates the merchant's location coordinates
+func (m *Merchant) UpdateLocation(s *xorm.Session, lng, lat float64, accuracy float64, address, service string, isManual bool) error {
+	m.Longitude = lng
+	m.Latitude = lat
+	m.GeocodeAccuracy = accuracy
+	m.GeocodeAddress = address
+	m.GeocodeService = service
+	m.IsManualLocation = isManual
+
+	// Update in database
+	_, err := s.ID(m.ID).Cols(
+		"longitude",
+		"latitude", 
+		"geocode_accuracy",
+		"geocode_address",
+		"geocode_service",
+		"is_manual_location",
+	).Update(m)
+	
+	if err != nil {
+		return err
+	}
+
+	// Also create/update a geo point record
+	geoPoint := &GeoPoint{
+		MerchantID:       m.ID,
+		Location:         WKBPoint{Lng: lng, Lat: lat},
+		OriginalAddress:  m.BusinessAddress,
+		FormattedAddress: address,
+		AccuracyScore:    accuracy,
+		GeocodingService: service,
+		IsManual:         isManual,
+		IsPrimary:        true,
+	}
+
+	// Check if primary geo point already exists
+	existing, err := GetPrimaryGeoPointByMerchantID(s, m.ID)
+	if err != nil && !IsErrGeoPointDoesNotExist(err) {
+		return err
+	}
+
+	if existing != nil {
+		// Update existing
+		geoPoint.ID = existing.ID
+		_, err = s.ID(existing.ID).Update(geoPoint)
+	} else {
+		// Create new
+		_, err = s.Insert(geoPoint)
+	}
+
+	return err
 }

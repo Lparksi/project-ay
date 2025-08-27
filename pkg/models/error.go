@@ -2070,3 +2070,76 @@ const ErrCodeMerchantDoesNotExist = 6001
 func (err ErrMerchantDoesNotExist) HTTPError() web.HTTPError {
 	return web.HTTPError{HTTPCode: http.StatusNotFound, Code: ErrCodeMerchantDoesNotExist, Message: "The merchant does not exist."}
 }
+
+// ErrMerchantTagDoesNotExist represents a "MerchantTagDoesNotExist" kind of error. Used if the merchant tag does not exist.
+type ErrMerchantTagDoesNotExist struct {
+	TagID int64
+}
+
+// IsErrMerchantTagDoesNotExist checks if an error is a ErrMerchantTagDoesNotExist.
+func IsErrMerchantTagDoesNotExist(err error) bool {
+	_, ok := err.(ErrMerchantTagDoesNotExist)
+	return ok
+}
+
+func (err ErrMerchantTagDoesNotExist) Error() string {
+	return fmt.Sprintf("Merchant tag does not exist [Tag ID: %d]", err.TagID)
+}
+
+// ErrCodeMerchantTagDoesNotExist holds the unique world-error code of this error
+const ErrCodeMerchantTagDoesNotExist = 14001
+
+// HTTPError holds the http error description
+func (err ErrMerchantTagDoesNotExist) HTTPError() web.HTTPError {
+	return web.HTTPError{HTTPCode: http.StatusNotFound, Code: ErrCodeMerchantTagDoesNotExist, Message: "The merchant tag does not exist."}
+}
+
+// ErrCannotDeleteSystemMerchantTag represents a "CannotDeleteSystemMerchantTag" kind of error.
+type ErrCannotDeleteSystemMerchantTag struct {
+	TagID int64
+}
+
+// IsErrCannotDeleteSystemMerchantTag checks if an error is a ErrCannotDeleteSystemMerchantTag.
+func IsErrCannotDeleteSystemMerchantTag(err error) bool {
+	_, ok := err.(ErrCannotDeleteSystemMerchantTag)
+	return ok
+}
+
+func (err ErrCannotDeleteSystemMerchantTag) Error() string {
+	return fmt.Sprintf("Cannot delete system merchant tag [Tag ID: %d]", err.TagID)
+}
+
+// ErrCodeCannotDeleteSystemMerchantTag holds the unique world-error code of this error
+const ErrCodeCannotDeleteSystemMerchantTag = 14002
+
+// HTTPError holds the http error description
+func (err ErrCannotDeleteSystemMerchantTag) HTTPError() web.HTTPError {
+	return web.HTTPError{HTTPCode: http.StatusForbidden, Code: ErrCodeCannotDeleteSystemMerchantTag, Message: "Cannot delete system merchant tag."}
+}
+
+// ErrGeoPointDoesNotExist represents a "GeoPointDoesNotExist" kind of error. Used if the geo point does not exist.
+type ErrGeoPointDoesNotExist struct {
+	GeoPointID int64
+	MerchantID int64
+}
+
+// IsErrGeoPointDoesNotExist checks if an error is a ErrGeoPointDoesNotExist.
+func IsErrGeoPointDoesNotExist(err error) bool {
+	_, ok := err.(ErrGeoPointDoesNotExist)
+	return ok
+}
+
+func (err ErrGeoPointDoesNotExist) Error() string {
+	if err.GeoPointID > 0 {
+		return fmt.Sprintf("Geo point does not exist [Geo Point ID: %d]", err.GeoPointID)
+	}
+	return fmt.Sprintf("Geo point does not exist for merchant [Merchant ID: %d]", err.MerchantID)
+}
+
+// ErrCodeGeoPointDoesNotExist holds the unique world-error code of this error
+const ErrCodeGeoPointDoesNotExist = 14003
+
+// HTTPError holds the http error description
+func (err ErrGeoPointDoesNotExist) HTTPError() web.HTTPError {
+	return web.HTTPError{HTTPCode: http.StatusNotFound, Code: ErrCodeGeoPointDoesNotExist, Message: "The geo point does not exist."}
+}
