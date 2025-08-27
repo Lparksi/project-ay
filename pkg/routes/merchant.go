@@ -18,11 +18,15 @@ package routes
 
 import (
 	"net/http"
+	"strconv"
 
+	"code.vikunja.io/api/pkg/db"
 	"code.vikunja.io/api/pkg/models"
+	auth2 "code.vikunja.io/api/pkg/modules/auth"
 	"code.vikunja.io/api/pkg/web/handler"
 
 	"github.com/labstack/echo/v4"
+	"github.com/xuri/excelize/v2"
 )
 
 func registerMerchantRoutes(a *echo.Group) {
@@ -52,8 +56,121 @@ func registerMerchantRoutes(a *echo.Group) {
 // @Failure 500 {object} web.HTTPError "Internal server error"
 // @Router /merchants/import [put]
 func MerchantImport(c echo.Context) error {
-	// This will be implemented with the XLSX import functionality
-	return c.JSON(http.StatusNotImplemented, map[string]string{
-		"message": "XLSX import will be implemented",
+	// Get auth
+	auth, err := auth2.GetAuthFromClaims(c)
+	if err != nil {
+		return handler.HandleHTTPError(err)
+	}
+
+	// Get database session
+	s := db.NewSession()
+	defer s.Close()
+
+	// Get uploaded file
+	file, err := c.FormFile("file")
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "No file uploaded"})
+	}
+
+	// Open the uploaded file
+	src, err := file.Open()
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Could not open file"})
+	}
+	defer src.Close()
+
+	// Read Excel file
+	xlsx, err := excelize.OpenReader(src)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid XLSX file"})
+	}
+	defer xlsx.Close()
+
+	// Get the first sheet
+	sheets := xlsx.GetSheetList()
+	if len(sheets) == 0 {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "No sheets found in XLSX file"})
+	}
+
+	rows, err := xlsx.GetRows(sheets[0])
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Could not read sheet data"})
+	}
+
+	if len(rows) < 2 {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "XLSX file must have header row and at least one data row"})
+	}
+
+	// Assume first row is header
+	// Expected columns: Title, LegalRepresentative, BusinessAddress, BusinessDistrict, ValidTime, 
+	//                  TrafficConditions, FixedEvents, TerminalType, SpecialTimePeriods, CustomFilters
+	var importedMerchants []*models.Merchant
+
+	for i, row := range rows[1:] { // Skip header row
+		if len(row) < 1 {
+			continue // Skip empty rows
+		}
+
+		merchant := &models.Merchant{
+			OwnerID: auth.GetID(),
+		}
+
+		// Map columns to merchant fields
+		if len(row) > 0 {
+			merchant.Title = row[0]
+		}
+		if len(row) > 1 {
+			merchant.LegalRepresentative = row[1]
+		}
+		if len(row) > 2 {
+			merchant.BusinessAddress = row[2]
+		}
+		if len(row) > 3 {
+			merchant.BusinessDistrict = row[3]
+		}
+		if len(row) > 4 {
+			merchant.ValidTime = row[4]
+		}
+		if len(row) > 5 {
+			merchant.TrafficConditions = row[5]
+		}
+		if len(row) > 6 {
+			merchant.FixedEvents = row[6]
+		}
+		if len(row) > 7 {
+			merchant.TerminalType = row[7]
+		}
+		if len(row) > 8 {
+			merchant.SpecialTimePeriods = row[8]
+		}
+		if len(row) > 9 {
+			merchant.CustomFilters = row[9]
+		}
+
+		// Skip if no title (required field)
+		if merchant.Title == "" {
+			continue
+		}
+
+		// Create merchant
+		err = merchant.Create(s, auth)
+		if err != nil {
+			_ = s.Rollback()
+			return c.JSON(http.StatusInternalServerError, map[string]string{
+				"error": "Error creating merchant at row " + strconv.Itoa(i+2) + ": " + err.Error(),
+			})
+		}
+
+		importedMerchants = append(importedMerchants, merchant)
+	}
+
+	if err = s.Commit(); err != nil {
+		return handler.HandleHTTPError(err)
+	}
+
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"message": "Import completed successfully",
+		"count":   len(importedMerchants),
+		"merchants": importedMerchants,
 	})
 }

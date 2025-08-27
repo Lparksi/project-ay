@@ -17,6 +17,8 @@
 package models
 
 import (
+	"encoding/json"
+	"strings"
 	"time"
 
 	"code.vikunja.io/api/pkg/user"
@@ -62,7 +64,6 @@ type Merchant struct {
 	OwnerID int64 `xorm:"bigint not null INDEX" json:"-"`
 
 	web.CRUDable `xorm:"-" json:"-"`
-	web.Rights   `xorm:"-" json:"-"`
 }
 
 // TableName returns the table name for merchants
@@ -102,11 +103,17 @@ func (m *Merchant) ReadOne(s *xorm.Session, auth web.Auth) (err error) {
 
 	m.Owner, _ = user.GetUserByID(s, m.OwnerID)
 
+	// Apply label replacements
+	err = m.ApplyLabelReplacements(s)
+	if err != nil {
+		return err
+	}
+
 	return
 }
 
 // ReadAll returns all merchants for a user
-func (m *Merchant) ReadAll(s *xorm.Session, auth web.Auth, search string, page int, perPage int) (interface{}, int64, int64, error) {
+func (m *Merchant) ReadAll(s *xorm.Session, auth web.Auth, search string, page int, perPage int) (interface{}, int, int64, error) {
 	query := s.Where("owner_id = ?", auth.GetID())
 
 	if search != "" {
@@ -128,14 +135,16 @@ func (m *Merchant) ReadAll(s *xorm.Session, auth web.Auth, search string, page i
 		return nil, 0, 0, err
 	}
 
-	// Load owners
+	// Load owners and apply label replacements
 	for _, merchant := range merchants {
 		merchant.Owner, _ = user.GetUserByID(s, merchant.OwnerID)
+		// Apply label replacements
+		merchant.ApplyLabelReplacements(s)
 	}
 
-	numberOfTotalItems := int64(len(merchants))
+	numberOfTotalItems := len(merchants)
 
-	return merchants, totalItems, numberOfTotalItems, nil
+	return merchants, numberOfTotalItems, totalItems, nil
 }
 
 // Update updates a merchant
@@ -183,17 +192,18 @@ func (m *Merchant) Delete(s *xorm.Session, auth web.Auth) (err error) {
 
 // CanWrite checks if the user can write to this merchant
 func (m *Merchant) CanWrite(s *xorm.Session, auth web.Auth) (bool, error) {
-	return m.checkRight(s, auth.GetID(), RightWrite)
+	return m.checkPermission(s, auth.GetID(), PermissionWrite)
 }
 
 // CanRead checks if the user can read this merchant
-func (m *Merchant) CanRead(s *xorm.Session, auth web.Auth) (bool, error) {
-	return m.checkRight(s, auth.GetID(), RightRead)
+func (m *Merchant) CanRead(s *xorm.Session, auth web.Auth) (bool, int, error) {
+	canRead, err := m.checkPermission(s, auth.GetID(), PermissionRead)
+	return canRead, int(PermissionRead), err
 }
 
 // CanDelete checks if the user can delete this merchant
 func (m *Merchant) CanDelete(s *xorm.Session, auth web.Auth) (bool, error) {
-	return m.checkRight(s, auth.GetID(), RightDelete)
+	return m.checkPermission(s, auth.GetID(), PermissionAdmin)
 }
 
 // CanCreate checks if the user can create a merchant
@@ -203,10 +213,65 @@ func (m *Merchant) CanCreate(s *xorm.Session, auth web.Auth) (bool, error) {
 
 // CanUpdate checks if the user can update this merchant
 func (m *Merchant) CanUpdate(s *xorm.Session, auth web.Auth) (bool, error) {
-	return m.checkRight(s, auth.GetID(), RightWrite)
+	return m.checkPermission(s, auth.GetID(), PermissionWrite)
 }
 
-func (m *Merchant) checkRight(s *xorm.Session, userID int64, right Right) (bool, error) {
+// LabelMapping represents a mapping between a placeholder and a label
+type LabelMapping struct {
+	Placeholder string `json:"placeholder"`
+	LabelID     int64  `json:"labelId"`
+}
+
+// ApplyLabelReplacements applies label replacements to merchant fields
+func (m *Merchant) ApplyLabelReplacements(s *xorm.Session) error {
+	if m.CustomFilters == "" {
+		return nil
+	}
+
+	// Parse label mappings from CustomFilters
+	var mappings []LabelMapping
+	err := json.Unmarshal([]byte(m.CustomFilters), &mappings)
+	if err != nil {
+		// If parsing fails, just return without error
+		return nil
+	}
+
+	// Build replacement map from placeholder to label title
+	replacements := make(map[string]string)
+	for _, mapping := range mappings {
+		if mapping.Placeholder == "" || mapping.LabelID == 0 {
+			continue
+		}
+
+		// Get label by ID
+		label := &Label{}
+		exists, err := s.Where("id = ?", mapping.LabelID).Get(label)
+		if err != nil || !exists {
+			continue
+		}
+
+		replacements[mapping.Placeholder] = label.Title
+	}
+
+	// Apply replacements to relevant fields
+	m.ValidTime = applyReplacements(m.ValidTime, replacements)
+	m.TrafficConditions = applyReplacements(m.TrafficConditions, replacements)
+	m.FixedEvents = applyReplacements(m.FixedEvents, replacements)
+	m.SpecialTimePeriods = applyReplacements(m.SpecialTimePeriods, replacements)
+
+	return nil
+}
+
+// applyReplacements applies a set of string replacements to a text
+func applyReplacements(text string, replacements map[string]string) string {
+	result := text
+	for placeholder, replacement := range replacements {
+		result = strings.ReplaceAll(result, placeholder, replacement)
+	}
+	return result
+}
+
+func (m *Merchant) checkPermission(s *xorm.Session, userID int64, permission Permission) (bool, error) {
 	// Load the merchant if we don't have one
 	if m.ID != 0 {
 		_, err := s.Where("id = ?", m.ID).Get(m)
