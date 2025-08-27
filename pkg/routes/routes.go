@@ -496,6 +496,12 @@ func registerAPIRoutes(a *echo.Group) {
 
 	// Merchant routes
 	registerMerchantRoutes(a)
+	
+	// Merchant tag routes
+	registerMerchantTagRoutes(a)
+	
+	// Geocoding routes
+	registerGeocodingRoutes(a)
 
 	projectTeamHandler := &handler.WebHandler{
 		EmptyStruct: func() handler.CObject {
