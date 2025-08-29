@@ -371,22 +371,6 @@ const router = createRouter({
 			},
 		},
 		{
-			path: '/merchants',
-			name: 'merchants.index',
-			component: () => import('@/views/merchant/ListMerchants.vue'),
-		},
-		{
-			path: '/merchants/new',
-			name: 'merchants.create',
-			component: () => import('@/views/merchant/MerchantEdit.vue'),
-		},
-		{
-			path: '/merchants/:id/edit',
-			name: 'merchants.edit',
-			component: () => import('@/views/merchant/MerchantEdit.vue'),
-			props: route => ({ id: Number(route.params.id as string) }),
-		},
-		{
 			path: '/filters/new',
 			name: 'filters.create',
 			component: () => import('@/views/filters/FilterNew.vue'),
@@ -408,6 +392,11 @@ const router = createRouter({
 			path: '/map',
 			name: 'map',
 			component: () => import('@/views/Map.vue'),
+		},
+		{
+			path: '/merchant',
+			name: 'merchant',
+			component: () => import('@/views/Merchant.vue'),
 		},
 	],
 })

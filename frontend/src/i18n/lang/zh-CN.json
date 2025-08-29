@@ -452,6 +452,42 @@
 			}
 		}
 	},
+	"merchant": {
+		"title": "商户名称",
+		"actions": {
+			"title": "操作",
+			"create": "创建商户",
+			"edit": "编辑",
+			"delete": "删除",
+			"deleteSelected": "删除选中",
+			"deleteMultiple": "删除多个商户",
+			"editMappings": "编辑映射"
+		},
+		"mapping": {
+			"help": "为字段定义占位符到标签 ID 的映射",
+			"placeholder": "占位符",
+			"add": "新增映射",
+			"saved": "映射已保存"
+		},
+		"messages": {
+			"confirmDeleteMultiple": "确认删除 {count} 个商户吗？",
+			"deleteMultipleSuccess": "已删除 {count} 个商户。",
+			"deleteMultipleError": "批量删除失败。",
+			"loadError": "加载商户失败",
+			"createSuccess": "商户已创建",
+			"createError": "创建商户失败",
+			"updateSuccess": "商户已更新",
+			"updateError": "更新商户失败",
+			"deleteSuccess": "商户已删除",
+			"deleteError": "删除商户失败"
+		},
+		"rules": {
+			"titleRequired": "请填写商户名称",
+			"legalRepresentativeRequired": "请填写法人",
+			"businessAddressRequired": "请填写经营地址",
+			"businessDistrictRequired": "请选择商圈"
+		}
+	},
 	"migrate": {
 		"title": "从其他服务导入",
 		"titleService": "从 {name} 导入您的数据到 Vikunja",
@@ -495,50 +531,41 @@
 		}
 	},
 	"merchant": {
-		"title": "商户管理",
-		"description": "管理商户信息，包括法人、地址、商圈等业务信息。",
-		"create": {
-			"title": "新建商户",
-			"description": "创建新的商户信息",
-			"success": "商户创建成功"
+		"title": "商户名称",
+		"legalRepresentative": "法人",
+		"businessAddress": "经营地址",
+		"businessDistrict": "商圈",
+		"validTime": "有效时间",
+		"trafficConditions": "交通情况",
+		"fixedEvents": "固定事件",
+		"terminalType": "终端类型",
+		"specialTimePeriods": "特殊时段",
+		"customFilters": "自定义筛选",
+		"businessDistrictOptions": {
+			"residential": "居民区",
+			"commercial": "商业（集贸）区",
+			"other": "其他"
 		},
-		"edit": {
-			"title": "编辑商户",
-			"description": "修改商户信息",
-			"success": "商户信息更新成功"
+		"actions": {
+			"title": "操作",
+			"create": "新增商户",
+			"edit": "编辑",
+			"delete": "删除"
 		},
-		"delete": {
-			"title": "删除商户",
-			"text1": "您确定要删除商户 '{merchant}' 吗？",
-			"text2": "此操作无法撤销。",
-			"success": "商户删除成功"
+		"rules": {
+			"titleRequired": "商户名称不能为空",
+			"legalRepresentativeRequired": "法人不能为空",
+			"businessAddressRequired": "经营地址不能为空",
+			"businessDistrictRequired": "商圈不能为空"
 		},
-		"import": {
-			"title": "导入商户",
-			"description": "从 XLSX 文件导入商户信息",
-			"success": "成功导入 {count} 个商户",
-			"noFileSelected": "请选择要导入的文件"
-		},
-		"attributes": {
-			"title": "商户名称",
-			"legalRepresentative": "法人",
-			"businessAddress": "经营地址",
-			"businessDistrict": "商圈",
-			"validTime": "有效时间",
-			"validTimeHelp": "可使用标签替换，如：A/B/C 等",
-			"trafficConditions": "交通情况",
-			"fixedEvents": "固定事件",
-			"terminalType": "终端类型",
-			"specialTimePeriods": "特殊时段",
-			"customFilters": "自定义筛选",
-			"customFiltersHelp": "JSON格式的自定义筛选配置"
-		},
-		"labelReplacement": {
-			"title": "标签替换配置",
-			"placeholder": "占位符（如：A、B、C）",
-			"selectLabel": "选择标签",
-			"add": "添加映射",
-			"help": "配置占位符与标签的映射关系，用于在有效时间等字段中自动替换"
+		"messages": {
+			"loadError": "加载商户信息失败",
+			"deleteSuccess": "删除成功",
+			"deleteError": "删除失败",
+			"updateSuccess": "更新成功",
+			"updateError": "更新失败",
+			"createSuccess": "创建成功",
+			"createError": "创建失败"
 		}
 	},
 	"sharing": {
@@ -547,657 +574,87 @@
 		"invalidPassword": "密码错误"
 	},
 	"navigation": {
-		"overview": "概览",
-		"upcoming": "即将开始",
-		"settings": "设置",
-		"imprint": "版权信息",
-		"privacy": "隐私政策"
+		"home": "首页",
+		"about": "关于",
+		"labels": "标签",
+		"teams": "团队",
+		"projects": "项目",
+		"map": "地图",
+		"merchant": "商户"
 	},
-	"misc": {
-		"loading": "载入中...",
-		"save": "保存",
-		"delete": "删除",
-		"confirm": "确认",
-		"cancel": "取消",
-		"refresh": "刷新",
-		"disable": "禁用",
-		"copy": "复制到剪贴板",
-		"copyError": "复制到剪贴板失败",
-		"search": "搜索",
-		"searchPlaceholder": "请输入查找条件…",
-		"previous": "上一个",
-		"next": "下一个",
-		"poweredBy": "由 Vikunja 提供支持",
-		"info": "信息",
-		"create": "创建",
-		"doit": "继续！",
-		"saving": "保存中...",
-		"saved": "保存完成！",
-		"default": "默认",
-		"close": "关闭",
-		"download": "下载",
-		"showMenu": "显示菜单",
-		"hideMenu": "隐藏菜单",
-		"forExample": "例如：",
-		"welcomeBack": "欢迎回来！",
-		"custom": "自定义",
-		"id": "ID",
-		"created": "创建于",
-		"createdBy": "由 {0} 创建",
-		"actions": "行为",
-		"cannotBeUndone": "此操作无法撤消！"
-	},
-	"input": {
-		"resetColor": "重置颜色",
-		"datepicker": {
-			"today": "今天",
-			"tomorrow": "明天",
-			"nextMonday": "下星期一",
-			"thisWeekend": "本周末",
-			"laterThisWeek": "本周稍后",
-			"nextWeek": "下周",
-			"chooseDate": "选择日期"
+	"user": {
+		"auth": {
+			"login": "登录",
+			"logout": "退出",
+			"register": "注册",
+			"resetPassword": "重置密码",
+			"createAccount": "创建账户"
 		},
-		"editor": {
-			"edit": "编辑",
-			"done": "完成",
-			"heading1": "一级标题",
-			"heading1Tooltip": "大标题。",
-			"heading2": "二级标题",
-			"heading2Tooltip": "中标题。",
-			"heading3": "三级标题",
-			"heading3Tooltip": "小标题。",
-			"headingSmaller": "下一级标题",
-			"headingBigger": "上一级标题",
-			"bold": "粗体",
-			"italic": "斜体",
-			"strikethrough": "删除线",
-			"underline": "下划线",
-			"code": "代码",
-			"codeTooltip": "捕获代码片段",
-			"quote": "引用",
-			"quoteTooltip": "捕获引文。",
-			"bulletList": "符号列表",
-			"bulletListTooltip": "创建一个简单的符号列表。",
-			"unorderedList": "无序列表",
-			"orderedList": "有序列表",
-			"orderedListTooltip": "创建带编号的列表。",
-			"cleanBlock": "清除格式",
-			"link": "链接",
-			"image": "图片",
-			"imageTooltip": "从您的计算机上传图片",
-			"horizontalRule": "水平线",
-			"horizontalRuleTooltip": "分割一节。",
-			"sideBySide": "并排",
-			"guide": "指南",
-			"text": "文本",
-			"textTooltip": "只需开始用纯文本键入。",
-			"taskList": "任务列表",
-			"taskListTooltip": "用待办事宜列表跟踪任务。",
-			"undo": "撤销",
-			"redo": "恢复",
-			"placeholder": "输入一些文本或点击“/”查看更多选项…",
-			"table": {
-				"title": "表格",
-				"insert": "插入表格",
-				"addColumnBefore": "在前面添加列",
-				"addColumnAfter": "在后面添加列",
-				"deleteColumn": "删除整列",
-				"addRowBefore": "在前面添加行",
-				"addRowAfter": "在后面添加行",
-				"deleteRow": "删除整行",
-				"deleteTable": "删除表格",
-				"mergeCells": "合并单元格",
-				"splitCell": "拆分单元格",
-				"toggleHeaderColumn": "切换头部列",
-				"toggleHeaderRow": "切换头部行",
-				"toggleHeaderCell": "切换头部单元格",
-				"mergeOrSplit": "合并或拆分",
-				"fixTables": "修复表格"
-			}
-		},
-		"multiselect": {
-			"selectPlaceholder": "点击或按 Enter 选择"
-		},
-		"datepickerRange": {
-			"to": "到",
-			"from": "开始",
-			"fromto": "{from} 到 {to}",
-			"date": "日期",
-			"ranges": {
-				"today": "今天",
-				"thisWeek": "本周",
-				"restOfThisWeek": "本周剩余时间",
-				"nextWeek": "下周",
-				"next7Days": "未来一周",
-				"lastWeek": "上周",
-				"thisMonth": "本月",
-				"restOfThisMonth": "本月剩余时间",
-				"nextMonth": "下个月",
-				"next30Days": "未来 30 天",
-				"lastMonth": "上个月",
-				"thisYear": "今年",
-				"restOfThisYear": "本年度剩余时间"
-			},
-			"values": {
-				"now": "现在",
-				"startOfToday": "今天开始",
-				"endOfToday": "今天结束",
-				"beginningOflastWeek": "上周开始",
-				"endOfLastWeek": "上周结束",
-				"beginningOfThisWeek": "本周开始",
-				"endOfThisWeek": "本周结束",
-				"startOfNextWeek": "下周开始",
-				"endOfNextWeek": "下周结束",
-				"in7Days": "7 天内",
-				"beginningOfLastMonth": "上月开始",
-				"endOfLastMonth": "上个月底",
-				"startOfThisMonth": "本月开始",
-				"endOfThisMonth": "这个月底",
-				"startOfNextMonth": "下月开始",
-				"endOfNextMonth": "下个月底",
-				"in30Days": "30 天内",
-				"startOfThisYear": "今年开始",
-				"endOfThisYear": "今年年底"
-			}
-		},
-		"datemathHelp": {
-			"canuse": "你可以使用 Date Math 来筛选相对日期。",
-			"learnhow": "查看它如何工作",
-			"title": "Date Math",
-			"intro": "指定应用过滤器时 Vikunja 即时解析的相对日期。",
-			"expression": "每个 Date Math 表达式以锚点日期开头，可以是 {0}，也可以是以 {1} 结尾的日期文本。 这个锚点日期后可以跟一个或多个数学表达式。",
-			"similar": "这些表达式类似于 {0} 和 {1} 提供的表达式。",
-			"add1Day": "加一天",
-			"minus1Day": "减一天",
-			"roundDay": "往最近的那天舍入",
-			"supportedUnits": "支持的时间单位是：",
-			"someExamples": "时间表达式的一些例子：",
-			"units": {
-				"seconds": "秒数。",
-				"minutes": "分钟",
-				"hours": "小时",
-				"days": "天",
-				"weeks": "周",
-				"months": "月",
-				"years": "年"
-			},
-			"examples": {
-				"now": "现在",
-				"in24h": "24 小时内",
-				"today": "今天 00:00",
-				"beginningOfThisWeek": "本周初 00:00",
-				"endOfThisWeek": "这周结束",
-				"in30Days": "30 天内",
-				"datePlusMonth": "{0} 加一个月于当日 00:00"
-			}
+		"settings": {
+			"title": "设置",
+			"general": "通用",
+			"avatar": "头像",
+			"password": "密码",
+			"caldav": "CalDAV",
+			"dataExport": "数据导出",
+			"emailUpdate": "邮箱更新",
+			"deletion": "账户删除",
+			"apiTokens": "API令牌",
+			"totp": "两步验证"
 		}
+	},
+	"project": {
+		"title": "项目",
+		"description": "描述",
+		"tasks": "任务",
+		"settings": "设置",
+		"create": "创建项目",
+		"delete": "删除项目",
+		"archive": "归档项目",
+		"duplicate": "复制项目",
+		"background": "背景",
+		"views": "项目视图",
+		"share": "共享项目",
+		"webhooks": "Webhooks"
 	},
 	"task": {
-		"task": "任务",
-		"delete": "删除此任务",
-		"createSuccess": "成功创建任务",
-		"doneSuccess": "待办事项已标记为完成。",
-		"undoneSuccess": "待办事项已标记为未完成。",
-		"undo": "撤销",
-		"openDetail": "查看任务详细信息",
-		"checklistTotal": "{checked} 项任务，共 {total} 项。",
-		"checklistAllDone": "一共 {total} 项任务",
-		"show": {
-			"titleCurrent": "当前任务",
-			"titleDates": "从 {from} 到 {to} 的任务",
-			"overdue": "显示过期任务",
-			"fromuntil": "从 {from} 到 {until} 的任务",
-			"select": "选择一个日期范围",
-			"noTasks": "没有待办事项 —— 祝你一天好心情！"
-		},
-		"detail": {
-			"chooseDueDate": "点击设定截止日期",
-			"chooseStartDate": "点击设置开始日期",
-			"chooseEndDate": "点击设定结束日期",
-			"move": "将任务移动到另一个项目",
-			"done": "标记为已完成",
-			"undone": "标记为待办",
-			"created": "{1} 创建于 {0}",
-			"updated": "更新于 {0}",
-			"doneAt": "已完成 {0}",
-			"updateSuccess": "该任务已保存",
-			"deleteSuccess": "任务已删除",
-			"belongsToProject": "该任务属于项目'{project}'",
-			"due": "截止至 {at}",
-			"closePopup": "关闭弹窗",
-			"organization": "机构",
-			"management": "管理",
-			"dateAndTime": "日期与时间",
-			"delete": {
-				"header": "删除此任务",
-				"text1": "确定要移除任务吗？",
-				"text2": "这将删除与此任务相关的所有附件、提醒和关联，无法撤消！"
-			},
-			"actions": {
-				"assign": "分配给用户",
-				"label": "添加标签",
-				"priority": "设置优先级",
-				"dueDate": "设置截止日期",
-				"startDate": "设置开始日期",
-				"endDate": "设置结束日期",
-				"reminders": "设置提醒",
-				"repeatAfter": "设置重复间隔",
-				"percentDone": "设置进度",
-				"attachments": "添加附件",
-				"relatedTasks": "添加关联",
-				"moveProject": "移动",
-				"color": "设置颜色",
-				"delete": "删除",
-				"favorite": "添加至收藏",
-				"unfavorite": "从收藏中移除"
-			}
-		},
-		"attributes": {
-			"assignees": "受理人",
-			"color": "颜色",
-			"created": "已创建",
-			"createdBy": "创建自",
-			"description": "描述信息",
-			"done": "完成",
-			"dueDate": "到期日",
-			"endDate": "结束日期",
-			"labels": "标签",
-			"percentDone": "进度",
-			"priority": "优先级",
-			"relatedTasks": "相关任务",
-			"reminders": "提醒",
-			"repeat": "重复",
-			"startDate": "开始日期",
-			"title": "标题",
-			"updated": "已更新",
-			"doneAt": "完成于"
-		},
-		"subscription": {
-			"subscribedTaskThroughParentProject": "你无法在此处取消订阅，因为你已通过其项目订阅了此任务。",
-			"subscribedProject": "你当前订阅了此项目，并将收到更改通知。",
-			"notSubscribedProject": "你没有订阅此项目，也不会收到更改通知。",
-			"subscribedTask": "你当前已订阅此任务并将收到更改通知。",
-			"notSubscribedTask": "你没有订阅此任务，也不会收到更改通知。",
-			"subscribe": "订阅",
-			"unsubscribe": "取消订阅",
-			"subscribeSuccessProject": "你现在订阅了此项目",
-			"unsubscribeSuccessProject": "您已取消订阅此项目",
-			"subscribeSuccessTask": "你现在订阅了此任务",
-			"unsubscribeSuccessTask": "你现在已取消订阅此任务"
-		},
-		"attachment": {
-			"title": "附件",
-			"createdBy": "创建 {0} 由 {1}",
-			"downloadTooltip": "下载此附件",
-			"upload": "上传附件",
-			"drop": "将文件拖放在此处上传",
-			"delete": "删除附件",
-			"deleteTooltip": "删除此附件",
-			"deleteText1": "你确定要删除附件 {filename} 吗？",
-			"copyUrl": "复制链接",
-			"copyUrlTooltip": "复制此附件的 url 在文本中使用",
-			"setAsCover": "制作封面",
-			"unsetAsCover": "移除封面",
-			"successfullyChangedCoverImage": "封面图片已成功更改。",
-			"usedAsCover": "封面图片"
-		},
-		"comment": {
-			"title": "评论",
-			"loading": "正在加载评论…",
-			"edited": "编辑于 {date}",
-			"creating": "正在创建评论…",
-			"placeholder": "添加您的评论，点击“/”获取更多选项…",
-			"comment": "评论",
-			"delete": "删除此评论",
-			"deleteText1": "确实要删除此评论吗?",
-			"deleteSuccess": "评论已删除。",
-			"addedSuccess": "评论已添加。"
-		},
-		"deferDueDate": {
-			"title": "推迟截止时间",
-			"1day": "1天",
-			"3days": "3 天",
-			"1week": "1周"
-		},
-		"description": {
-			"placeholder": "输入描述，点击'/'获取更多选项…",
-			"empty": "尚无描述。"
-		},
-		"assignee": {
-			"placeholder": "分配给用户...",
-			"selectPlaceholder": "分配给用户",
-			"assignSuccess": "已成功分配用户。",
-			"unassignSuccess": "已成功取消分配用户。"
-		},
-		"label": {
-			"createPlaceholder": "将此添加为新标签",
-			"addSuccess": "已成功添加标签。",
-			"createSuccess": "已成功创建标签。",
-			"removeSuccess": "已成功移除标签。",
-			"addCreateSuccess": "标签已创建并添加成功。",
-			"delete": {
-				"header": "删除此标签",
-				"text1": "确定要删除此标签吗？",
-				"text2": "这将从所有任务中删除它，无法恢复。"
-			}
-		},
-		"priority": {
-			"unset": "取消设置",
-			"low": "低",
-			"medium": "中",
-			"high": "高",
-			"urgent": "紧急",
-			"doNow": "现在立刻"
-		},
-		"relation": {
-			"add": "添加新任务关系",
-			"new": "新任务关系",
-			"differentProject": "此任务属于另一个项目。",
-			"noneYet": "还没有任务关联。",
-			"delete": "删除关联",
-			"deleteText1": "确定要删除此任务关联吗？",
-			"select": "选择关联类型",
-			"taskRequired": "请选择一个任务或输入一个新的任务标题。",
-			"kinds": {
-				"subtask": "子任务 | 所有子任务",
-				"parenttask": "上级任务 | 所有上级任务",
-				"related": "相关任务 | 相关任务",
-				"duplicateof": "重复 | 所有重复",
-				"duplicates": "重复 | 所有重复",
-				"blocking": "封禁 | 封禁",
-				"blocked": "被阻止 | 被阻止",
-				"precedes": "优先级 | 优先级",
-				"follows": "关注 | 关注",
-				"copiedfrom": "复制自 | 复制自",
-				"copiedto": "复制到 | 复制到"
-			}
-		},
-		"reminder": {
-			"before": "{type}前{amount} {unit} ",
-			"after": "{type}后{amount} {unit} ",
-			"beforeShort": "之前",
-			"afterShort": "之后",
-			"onDueDate": "截止日期",
-			"onStartDate": "开始日期",
-			"onEndDate": "结束日期",
-			"custom": "自定义",
-			"dateAndTime": "日期与时间"
-		},
-		"repeat": {
-			"everyDay": "每天",
-			"everyWeek": "每周",
-			"every30d": "每 30 天",
-			"mode": "重复模式",
-			"monthly": "每月",
-			"each": "每个",
-			"specifyAmount": "指定数量…",
-			"hours": "小时",
-			"days": "天",
-			"weeks": "周",
-			"months": "月",
-			"years": "年",
-			"invalidAmount": "请输入大于 0 的数。"
-		},
-		"quickAddMagic": {
-			"hint": "使用魔法前缀来定义到期日期、受让人和其他任务属性。",
-			"title": "快速添加 Magic",
-			"intro": "创建任务时，可以使用特殊关键字直接为新创建的任务添加属性。 这能够更快地将常用属性添加到任务中。",
-			"multiple": "你可以多次使用此功能。",
-			"label1": "要添加标签，只需在标签名称前加上 {prefix}。",
-			"label2": "Vikunja 首先检查标签是否存在，如果不存在则创建。",
-			"label3": "要使用空格，只需在标签名称周围添加一个 \" 或 '。",
-			"label4": "例如：{prefix} “带空格的标签”。",
-			"priority1": "要设置任务的优先级，请添加数字 1-5，并以 {prefix} 为前缀。",
-			"priority2": "数字越大，优先级越高。",
-			"assignees": "将任务分配给用户，请将带有 {prefix} 前缀的用户名添加到此任务中。",
-			"project1": "要设置任务显示的项目，请输入其名称，前缀为{prefix}。",
-			"project2": "如果项目不存在会返回错误。",
-			"project3": "要使用空格，只需在项目名称周围添加一个 \" 或 '。",
-			"project4": "例如：{prefix} “带空格的项目”。",
-			"dateAndTime": "日期与时间",
-			"date": "任何日期都将当做新任务的截止日期。 可以使用以下格式的日期：",
-			"dateCurrentYear": "将使用当前年份",
-			"dateNth": "将使用当月的第 {day} 天",
-			"dateTime": "将日期格式与 “{time}”（或 {timePM}）组合以设置时间。",
-			"repeats": "重复的任务",
-			"repeatsDescription": "将任务设置为间隔重复，只需在任务文本中添加 “{suffix}” 即可。 内容必须是数字，并且可以省略使用类型（参见示例）。"
-		}
+		"title": "任务",
+		"description": "描述",
+		"done": "已完成",
+		"position": "位置",
+		"assignees": "负责人",
+		"labels": "标签",
+		"dueDate": "截止日期",
+		"startDate": "开始日期",
+		"endDate": "结束日期",
+		"percentDone": "完成百分比",
+		"priority": "优先级",
+		"repeatAfter": "重复周期",
+		"created": "创建时间",
+		"updated": "更新时间",
+		"create": "创建任务",
+		"delete": "删除任务",
+		"edit": "编辑任务",
+		"donePercentage": "完成 {percent}%"
+	},
+	"label": {
+		"title": "标签",
+		"description": "描述",
+		"color": "颜色",
+		"create": "创建标签",
+		"delete": "删除标签",
+		"edit": "编辑标签"
 	},
 	"team": {
 		"title": "团队",
-		"noTeams": "你目前不属于任何团队。",
-		"create": {
-			"success": "团队已成功创建。"
-		},
-		"edit": {
-			"title": "编辑团队 \"{team}\"",
-			"members": "团队成员",
-			"search": "输入以搜索用户…",
-			"addUser": "加入到团队",
-			"makeMember": "设为成员",
-			"makeAdmin": "设为管理员",
-			"success": "团队已更新。",
-			"userAddedSuccess": "团队成员已添加。",
-			"madeMember": "该团队成员已添加为成员。",
-			"madeAdmin": "该团队成员已成为管理员。",
-			"mustSelectUser": "请选择一个用户",
-			"delete": {
-				"header": "删除此团队",
-				"text1": "确定要删除此团队及其所有成员吗？",
-				"text2": "所有团队成员都将无法访问共享给该团队的项目。并且无法撤消！",
-				"success": "团队已删除。"
-			},
-			"deleteUser": {
-				"header": "从团队中删除用户",
-				"text1": "确定要将此成员移出团队吗？",
-				"text2": "所有团队成员都将失去所有项目的访问权限，并且无法撤销!",
-				"success": "此用户已成功从团队中删除。"
-			},
-			"leave": {
-				"title": "离开团队",
-				"text1": "您确定要离开这个团队吗？",
-				"text2": "您将无法访问该团队拥有的所有项目。 如果你改变主意，你需要一个团队管理员来再次添加你。",
-				"success": "您已经成功离开了团队。"
-			}
-		},
-		"attributes": {
-			"name": "团队名称",
-			"namePlaceholder": "团队的名字在这里……",
-			"nameRequired": "请指定名称。",
-			"description": "描述信息",
-			"descriptionPlaceholder": "在此描述团队，点击'/'获取更多选项…",
-			"admin": "管理员",
-			"member": "成员",
-			"isPublic": "公开团队",
-			"isPublicDescription": "让团队公开发现。如果启用，任何人都可以与这个团队分享项目，即使不是直接成员。"
-		}
+		"description": "描述",
+		"members": "成员",
+		"create": "创建团队",
+		"delete": "删除团队",
+		"edit": "编辑团队",
+		"addMember": "添加成员"
 	},
-	"keyboardShortcuts": {
-		"title": "键盘快捷键",
-		"general": "常规",
-		"allPages": "这些快捷方式适用于所有页面。",
-		"currentPageOnly": "这些快捷方式仅适用于当前页面。",
-		"somePagesOnly": "这些快捷方式仅适用于某些页面。",
-		"toggleMenu": "切换菜单",
-		"quickSearch": "打开搜索/快速操作栏",
-		"then": "组合",
-		"task": {
-			"title": "任务页面",
-			"done": "标记任务已完成 / 取消",
-			"assign": "分配此任务给一个用户",
-			"labels": "向此任务添加标签",
-			"dueDate": "更改此任务的截止日期",
-			"attachment": "向此任务添加附件。",
-			"related": "修改此任务的相关任务",
-			"color": "更改此任务的颜色",
-			"move": "将此任务移至另一个项目。",
-			"reminder": "管理此任务的提醒",
-			"description": "切换编辑时的任务描述",
-			"delete": "删除此任务",
-			"priority": "更改此任务的优先级",
-			"favorite": "将此任务标记为收藏/取消收藏",
-			"save": "保存当前任务"
-		},
-		"project": {
-			"title": "项目视图",
-			"switchToListView": "切换到列表视图",
-			"switchToGanttView": "切换到甘特图",
-			"switchToKanbanView": "切换到看板视图",
-			"switchToTableView": "切换为表格视图"
-		},
-		"navigation": {
-			"title": "导航栏",
-			"overview": "导航到概览",
-			"upcoming": "导航到即将到来的任务",
-			"labels": "导航到标签",
-			"teams": "导航到小组",
-			"projects": "导航到项目"
-		}
-	},
-	"update": {
-		"available": "有新版本可用。",
-		"do": "立即更新"
-	},
-	"menu": {
-		"edit": "编辑",
-		"archive": "归档",
-		"duplicate": "复制",
-		"delete": "删除",
-		"unarchive": "取消存档",
-		"share": "共享",
-		"newProject": "新项目",
-		"createProject": "创建项目",
-		"cantArchiveIsDefault": "您不能归档，因为这是您的默认项目。",
-		"cantDeleteIsDefault": "您不能删除这个项目，因为这是您的默认项目。",
-		"views": "视图"
-	},
-	"apiConfig": {
-		"url": "Vikunja URL",
-		"urlPlaceholder": "例如： http://localhost:3456",
-		"change": "换一换",
-		"use": "在 {0} 使用 Vikunja 安装程序",
-		"error": "无法在“{domain}”找到或使用 Vikunja 安装。 请检查url格式是否正确，直接访问是否可以访问，然后重试。",
-		"success": "在 “{domain}” 上使用 Vikunja 安装程序。",
-		"urlRequired": "Url 是必需的。"
-	},
-	"loadingError": {
-		"failed": "加载失败，请 {0}。 如果错误仍然存在，请 {1}。",
-		"tryAgain": "重试",
-		"contact": "联系我们"
-	},
-	"notification": {
-		"title": "通知",
-		"none": "没有任何通知。 祝你今天过得愉快！",
-		"markAllRead": "将所有通知标为已读",
-		"markAllReadSuccess": "成功标记所有通知为已读。"
-	},
-	"quickActions": {
-		"commands": "命令",
-		"placeholder": "输入命令或搜索…",
-		"hint": "可以使用 {project} 将搜索限制在项目中。 将 {project} 或 {label}（标签）与搜索查询相结合，可以搜索有这些标签或在该项目中的任务。 {assignee} 仅适用于在团队中搜索。",
-		"tasks": "任务",
-		"projects": "项目",
-		"teams": "团队",
-		"labels": "标签",
-		"newProject": "输入新项目的标题…",
-		"newTask": "输入新任务的标题...",
-		"newTeam": "输入新团队的名称...",
-		"createTask": "在当前项目中创建一个任务 ({title})",
-		"createProject": "创建一个项目",
-		"cmds": {
-			"newTask": "新建任务",
-			"newProject": "新项目",
-			"newTeam": "新建团队"
-		}
-	},
-	"date": {
-		"altFormatShort": "j M Y"
-	},
-	"reaction": {
-		"reactedWith": "{user} {value} 反应",
-		"reactedWithAnd": "{users} 和{lastUser} 的{value} 反应",
-		"reactedWithAndMany": "{users} 和{num} 的{value} 反应",
-		"add": "添加您的反应"
-	},
-	"error": {
-		"1001": "具有此用户名的用户已存在。",
-		"1002": "已存在使用该邮箱的用户。",
-		"1004": "未提供用户名和密码。",
-		"1005": "用户不存在。",
-		"1006": "无法获取用户 ID。",
-		"1008": "未提供密码重置令牌。",
-		"1009": "密码重置令牌无效。",
-		"1010": "电子邮件确认令牌无效。",
-		"1011": "用户名或密码错误。",
-		"1012": "用户的电子邮件地址未确认。",
-		"1013": "新密码为空。",
-		"1014": "旧密码为空。",
-		"1018": "用户头像设置无效。",
-		"2001": "ID 不能为空或 0。",
-		"2002": "一些请求数据无效。",
-		"3001": "项目不存在",
-		"3004": "您需要读取该项目的权限才能执行此操作。",
-		"3005": "列表标题不能为空。",
-		"3006": "项目共享不存在。",
-		"3007": "具有此标识符的项目已存在。",
-		"3008": "该项目已存档，因此只能读取。与该项目相关的所有任务也是如此。",
-		"4003": "所有批量编辑任务必须属于同一项目。",
-		"4004": "批量编辑任务时至少需要选择一项任务。",
-		"4005": "你没有权限查看此任务。",
-		"4006": "不能将上级任务设置为任务本身。",
-		"4007": "不能创建具有无效关系类型的任务关联。",
-		"4008": "不能创建已经存在的任务关系。",
-		"4009": "任务关系不存在。",
-		"4010": "无法将任务与其自身相关联。",
-		"4011": "任务附件不存在。",
-		"4012": "任务附件过大。",
-		"4013": "任务排序参数无效。",
-		"4014": "任务排序顺序无效。",
-		"4015": "任务评论不存在。",
-		"4016": "任务字段无效。",
-		"4017": "任务筛选比较器无效。",
-		"4018": "任务筛选连接器无效。",
-		"4019": "任务筛选值无效。",
-		"6001": "团队名称不能为空。",
-		"6002": "团队不存在。",
-		"6004": "该团队已经可以访问该项目。",
-		"6005": "该用户已经是此团队的成员。",
-		"6006": "无法删除最后一个团队成员。",
-		"6007": "该团队没有权限访问此项目来执行操作。",
-		"7002": "用户已经有权访问此项目。",
-		"7003": "您无权访问此项目",
-		"8001": "此标签已存在于该任务中。",
-		"8002": "标签不存在。",
-		"8003": "你没有权限访问此标签。",
-		"9001": "权限无效。",
-		"10001": "存储桶不存在。",
-		"10002": "此存储桶不属于该项目。",
-		"10003": "无法删除项目中的最后一个存储桶。",
-		"10004": "无法将任务添加到此存储桶，因为已超过此存储桶可容纳的任务限制。",
-		"10005": "每个项目只能有一个已完成的桶。",
-		"11001": "已保存筛选器不存在。",
-		"11002": "已保存的筛选器不适用于链接共享。",
-		"12001": "订阅实体类型无效。",
-		"12002": "你已经订阅实体本身或上级实体。",
-		"13001": "此链接共享需要密码进行身份验证，但没有提供密码。",
-		"error": "错误",
-		"success": "成功",
-		"0001": "不允许这样操作"
-	},
-	"about": {
-		"title": "关于",
-		"version": "版本：{version}"
-	},
-	"time": {
-		"units": {
-			"seconds": "秒|秒",
-			"minutes": "分|分钟",
-			"hours": "时|小时",
-			"days": "天|天",
-			"weeks": "周|周",
-			"months": "月|月",
-			"years": "年|年"
-		}
+	"map": {
+		"title": "地图"
 	}
 }

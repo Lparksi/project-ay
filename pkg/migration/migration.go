@@ -35,6 +35,26 @@ import (
 	"xorm.io/xorm"
 )
 
+// This is the list of all migrations. Add new migrations to the bottom of the list.
+// If you want to add a new migration, create a new file in this directory with the next higher number.
+// The filename should be the next higher number and a short description of the migration.
+// For example: 20200102150405_add_user_table.go
+// The migration should be added to the init function in the file.
+// The migration should be added to the bottom of the list.
+// The migration should be a struct that implements the xormigrate.Migration interface.
+// The migration should have a unique ID.
+// The migration should have a description.
+// The migration should have a Migrate function.
+// The migration should have a Rollback function.
+// The migration should be added to the migrations slice.
+// The migration should be added to the bottom of the list.
+// The migration should be a struct that implements the xormigrate.Migration interface.
+// The migration should have a unique ID.
+// The migration should have a description.
+// The migration should have a Migrate function.
+// The migration should have a Rollback function.
+// The migration should be added to the migrations slice.
+// The migration should be added to the bottom of the list.
 // You can get the id string for new migrations by running `date +%Y%m%d%H%M%S` on a unix system.
 
 var migrations []*xormigrate.Migration

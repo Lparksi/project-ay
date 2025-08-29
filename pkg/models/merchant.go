@@ -18,6 +18,7 @@ package models
 
 import (
 	"encoding/json"
+	"mime/multipart"
 	"strings"
 	"time"
 
@@ -28,39 +29,59 @@ import (
 )
 
 // Merchant represents a merchant with business information
+// swagger:model merchant
 type Merchant struct {
 	// The unique, numeric id of this merchant.
+	// required: true
+	// example: 1
 	ID int64 `xorm:"bigint autoincr not null unique pk" json:"id" param:"merchant"`
 	// The title/name of the merchant.
+	// required: true
+	// example: ABC Store
 	Title string `xorm:"varchar(250) not null" json:"title" valid:"required,runelength(1|250)" minLength:"1" maxLength:"250"`
 	// The legal representative of the merchant.
+	// example: John Doe
 	LegalRepresentative string `xorm:"varchar(250) null" json:"legal_representative" valid:"runelength(0|250)" maxLength:"250"`
 	// The business address of the merchant.
+	// example: 123 Main St, City, State
 	BusinessAddress string `xorm:"varchar(500) null" json:"business_address" valid:"runelength(0|500)" maxLength:"500"`
 	// The business district of the merchant.
+	// example: commercial
 	BusinessDistrict string `xorm:"varchar(250) null" json:"business_district" valid:"runelength(0|250)" maxLength:"250"`
 	// The valid time period for the merchant.
+	// example: Morning
 	ValidTime string `xorm:"varchar(250) null" json:"valid_time" valid:"runelength(0|250)" maxLength:"250"`
 	// The traffic conditions description.
+	// example: High traffic during lunch hours
 	TrafficConditions string `xorm:"longtext null" json:"traffic_conditions"`
 	// Fixed events description.
+	// example: Closed on Sundays
 	FixedEvents string `xorm:"longtext null" json:"fixed_events"`
 	// Terminal type information.
+	// example: Desktop
 	TerminalType string `xorm:"varchar(250) null" json:"terminal_type" valid:"runelength(0|250)" maxLength:"250"`
 	// Special time periods description.
+	// example: Extra busy during holidays
 	SpecialTimePeriods string `xorm:"longtext null" json:"special_time_periods"`
 	// Custom filter properties as JSON.
+	// example: {"validTime": "Morning", "trafficConditions": "High"}
 	CustomFilters string `xorm:"longtext null" json:"custom_filters"`
 
 	// A timestamp when this merchant was created. You cannot change this value.
+	// readOnly: true
+	// example: 2023-01-01T00:00:00Z
 	Created time.Time `xorm:"created not null" json:"created"`
 	// A timestamp when this merchant was last updated. You cannot change this value.
+	// readOnly: true
+	// example: 2023-01-01T00:00:00Z
 	Updated time.Time `xorm:"updated not null" json:"updated"`
 
 	// The user who created this merchant.
+	// readOnly: true
 	Owner *user.User `xorm:"-" json:"owner" valid:"-"`
 
 	// The user id of the user who created this merchant.
+	// readOnly: true
 	OwnerID int64 `xorm:"bigint not null INDEX" json:"-"`
 
 	web.CRUDable `xorm:"-" json:"-"`
@@ -216,10 +237,23 @@ func (m *Merchant) CanUpdate(s *xorm.Session, auth web.Auth) (bool, error) {
 	return m.checkPermission(s, auth.GetID(), PermissionWrite)
 }
 
+// BusinessDistrict represents the business district of a merchant
+// swagger:enum BusinessDistrict
+type BusinessDistrict string
+
+const (
+	// BusinessDistrictResidential represents a residential area
+	BusinessDistrictResidential BusinessDistrict = "residential"
+	// BusinessDistrictCommercial represents a commercial (market) area
+	BusinessDistrictCommercial BusinessDistrict = "commercial"
+	// BusinessDistrictOther represents other areas
+	BusinessDistrictOther BusinessDistrict = "other"
+)
+
 // FieldLabelMapping represents field-specific label mappings
 type FieldLabelMapping struct {
-	Field       string         `json:"field"`       // Field name (e.g., "validTime", "trafficConditions")
-	Mappings    []LabelMapping `json:"mappings"`    // Array of placeholder to label mappings for this field
+	Field    string         `json:"field"`    // Field name (e.g., "validTime", "trafficConditions")
+	Mappings []LabelMapping `json:"mappings"` // Array of placeholder to label mappings for this field
 }
 
 // LabelMapping represents a mapping between a placeholder and a label
@@ -335,4 +369,234 @@ func (m *Merchant) checkPermission(s *xorm.Session, userID int64, permission Per
 	}
 
 	return false, nil
+}
+
+// swagger:operation GET /merchants merchant listMerchants
+// ---
+// summary: Get all merchants
+// description: Get all merchants for the current user
+// parameters:
+// - name: page
+//   in: query
+//   description: The page number. Used for pagination.
+//   type: integer
+//   default: 1
+// - name: per_page
+//   in: query
+//   description: The number of items per page. Used for pagination.
+//   type: integer
+//   default: 50
+// - name: s
+//   in: query
+//   description: Search merchants by title
+//   type: string
+// produces:
+// - application/json
+// responses:
+//   "200":
+//     description: The merchants
+//     schema:
+//       type: array
+//       items:
+//         $ref: '#/definitions/merchant'
+//   "401":
+//     description: Unauthorized
+//     schema:
+//       $ref: '#/definitions/HTTPError'
+//   "500":
+//     description: Internal error
+//     schema:
+//       $ref: '#/definitions/HTTPError'
+
+// swagger:operation POST /merchants merchant createMerchant
+// ---
+// summary: Create a merchant
+// description: Create a new merchant
+// parameters:
+// - name: merchant
+//   in: body
+//   description: The merchant to create
+//   required: true
+//   schema:
+//     $ref: '#/definitions/merchant'
+// produces:
+// - application/json
+// responses:
+//   "200":
+//     description: The created merchant
+//     schema:
+//       $ref: '#/definitions/merchant'
+//   "400":
+//     description: Bad request
+//     schema:
+//       $ref: '#/definitions/HTTPError'
+//   "401":
+//     description: Unauthorized
+//     schema:
+//       $ref: '#/definitions/HTTPError'
+//   "500":
+//     description: Internal error
+//     schema:
+//       $ref: '#/definitions/HTTPError'
+
+// swagger:operation GET /merchants/{merchant} merchant getMerchant
+// ---
+// summary: Get a merchant
+// description: Get a merchant by its ID
+// parameters:
+// - name: merchant
+//   in: path
+//   description: The merchant ID
+//   required: true
+//   type: integer
+// produces:
+// - application/json
+// responses:
+//   "200":
+//     description: The merchant
+//     schema:
+//       $ref: '#/definitions/merchant'
+//   "401":
+//     description: Unauthorized
+//     schema:
+//       $ref: '#/definitions/HTTPError'
+//   "404":
+//     description: Merchant not found
+//     schema:
+//       $ref: '#/definitions/HTTPError'
+//   "500":
+//     description: Internal error
+//     schema:
+//       $ref: '#/definitions/HTTPError'
+
+// swagger:operation POST /merchants/{merchant} merchant updateMerchant
+// ---
+// summary: Update a merchant
+// description: Update a merchant by its ID
+// parameters:
+// - name: merchant
+//   in: path
+//   description: The merchant ID
+//   required: true
+//   type: integer
+// - name: merchantUpdate
+//   in: body
+//   description: The merchant update
+//   required: true
+//   schema:
+//     $ref: '#/definitions/merchant'
+// produces:
+// - application/json
+// responses:
+//   "200":
+//     description: The updated merchant
+//     schema:
+//       $ref: '#/definitions/merchant'
+//   "400":
+//     description: Bad request
+//     schema:
+//       $ref: '#/definitions/HTTPError'
+//   "401":
+//     description: Unauthorized
+//     schema:
+//       $ref: '#/definitions/HTTPError'
+//   "404":
+//     description: Merchant not found
+//     schema:
+//       $ref: '#/definitions/HTTPError'
+//   "500":
+//     description: Internal error
+//     schema:
+//       $ref: '#/definitions/HTTPError'
+
+// swagger:operation DELETE /merchants/{merchant} merchant deleteMerchant
+// ---
+// summary: Delete a merchant
+// description: Delete a merchant by its ID
+// parameters:
+// - name: merchant
+//   in: path
+//   description: The merchant ID
+//   required: true
+//   type: integer
+// produces:
+// - application/json
+// responses:
+//   "200":
+//     description: Merchant deleted
+//     schema:
+//       $ref: '#/definitions/HTTPSuccess'
+//   "401":
+//     description: Unauthorized
+//     schema:
+//       $ref: '#/definitions/HTTPError'
+//   "404":
+//     description: Merchant not found
+//     schema:
+//       $ref: '#/definitions/HTTPError'
+//   "500":
+//     description: Internal error
+//     schema:
+//       $ref: '#/definitions/HTTPError'
+
+// swagger:parameters listMerchants
+type listMerchantsParams struct {
+	// The page number. Used for pagination.
+	// in: query
+	// required: false
+	// default: 1
+	Page int `json:"page"`
+	// The number of items per page. Used for pagination.
+	// in: query
+	// required: false
+	// default: 50
+	PerPage int `json:"per_page"`
+	// Search merchants by title
+	// in: query
+	// required: false
+	Search string `json:"s"`
+}
+
+// swagger:parameters createMerchant
+type createMerchantParams struct {
+	// The merchant to create
+	// in: body
+	// required: true
+	Body Merchant
+}
+
+// swagger:parameters getMerchant updateMerchant deleteMerchant
+type merchantParams struct {
+	// The merchant ID
+	// in: path
+	// required: true
+	MerchantID int64 `json:"merchant"`
+}
+
+// swagger:parameters updateMerchant
+type updateMerchantParams struct {
+	// The merchant update
+	// in: body
+	// required: true
+	Body Merchant
+}
+
+// swagger:parameters importMerchants
+type importMerchantsParams struct {
+	// XLSX file to import
+	// in: formData
+	// required: true
+	File *multipart.FileHeader `json:"file"`
+}
+
+// swagger:response merchantList
+type merchantListResponse struct {
+	// in: body
+	Body []Merchant
+}
+
+// swagger:response merchant
+type merchantResponse struct {
+	// in: body
+	Body Merchant
 }

@@ -61,16 +61,6 @@
 				</li>
 				<li>
 					<RouterLink
-						:to="{ name: 'merchants.index'}"
-					>
-						<span class="menu-item-icon icon">
-							<Icon icon="store" />
-						</span>
-						{{ $t('merchant.title') }}
-					</RouterLink>
-				</li>
-				<li>
-					<RouterLink
 						v-shortcut="'g m'"
 						:to="{ name: 'teams.index'}"
 					>
@@ -88,6 +78,16 @@
 							<Icon icon="map" />
 						</span>
 						{{ $t('navigation.map') }}
+					</RouterLink>
+				</li>
+				<li>
+					<RouterLink
+						:to="{ name: 'merchant' }"
+					>
+						<span class="menu-item-icon icon">
+							<Icon icon="store" />
+						</span>
+						{{ $t('navigation.merchant') }}
 					</RouterLink>
 				</li>
 			</menu>

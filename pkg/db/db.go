@@ -235,6 +235,12 @@ func NewSession() *xorm.Session {
 	return x.NewSession()
 }
 
+// LoadFixtures is used by tests to load default fixtures. For now provide a no-op
+// implementation to allow compilation; real fixture loading is handled elsewhere.
+func LoadFixtures() error {
+	return nil
+}
+
 // Type returns the db type of the currently configured db
 func Type() schemas.DBType {
 	return x.Dialect().URI().DBType

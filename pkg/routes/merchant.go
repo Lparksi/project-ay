@@ -44,6 +44,7 @@ func registerMerchantRoutes(a *echo.Group) {
 	a.POST("/merchants/:merchant", merchantHandler.UpdateWeb)
 	a.DELETE("/merchants/:merchant", merchantHandler.DeleteWeb)
 	a.PUT("/merchants/import", merchantImport)
+	a.POST("/merchants/bulk_delete", merchantBulkDelete)
 }
 
 // merchantImport handles XLSX import for merchants
@@ -119,7 +120,7 @@ func merchantImport(c echo.Context) error {
 	// Parse header row
 	header := rows[0]
 	expectedHeaders := []string{"法人", "经营地址", "商圈", "有效时间", "交通情况", "固定事件", "终端类型", "特殊时段", "自定义筛选"}
-	
+
 	// Create a map of header positions
 	headerMap := make(map[string]int)
 	for i, h := range header {
@@ -187,9 +188,9 @@ func merchantImport(c echo.Context) error {
 		merchant.Title = title
 
 		// Skip if all fields are empty
-		if merchant.LegalRepresentative == "" && 
-		   merchant.BusinessAddress == "" && 
-		   merchant.BusinessDistrict == "" {
+		if merchant.LegalRepresentative == "" &&
+			merchant.BusinessAddress == "" &&
+			merchant.BusinessDistrict == "" {
 			continue
 		}
 
@@ -210,8 +211,111 @@ func merchantImport(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, map[string]interface{}{
-		"message": "Import completed successfully",
-		"count":   len(importedMerchants),
+		"message":   "Import completed successfully",
+		"count":     len(importedMerchants),
 		"merchants": importedMerchants,
 	})
 }
+
+// merchantBulkDelete handles bulk deletion of merchants
+// @Summary Bulk delete merchants
+// @Description Deletes multiple merchants by ID
+// @tags merchant
+// @Accept json
+// @Param ids body object true "{\"ids\": [1,2,3]}"
+// @Produce json
+// @Security JWTKeyAuth
+// @Success 200 {object} map[string]interface{}
+// @Failure 400 {object} web.HTTPError
+// @Failure 500 {object} web.HTTPError
+// @Router /merchants/bulk_delete [post]
+func merchantBulkDelete(c echo.Context) error {
+	// Get auth
+	auth, err := auth2.GetAuthFromClaims(c)
+	if err != nil {
+		return handler.HandleHTTPError(err)
+	}
+
+	// Get database session
+	s := db.NewSession()
+	defer s.Close()
+
+	// Parse body
+	var payload struct {
+		IDs []int64 `json:"ids"`
+	}
+	if err := c.Bind(&payload); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid payload"})
+	}
+
+	if len(payload.IDs) == 0 {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "No ids provided"})
+	}
+
+	deleted := 0
+	for _, id := range payload.IDs {
+		m := &models.Merchant{ID: id}
+		if err := m.Delete(s, auth); err != nil {
+			// rollback and return error
+			_ = s.Rollback()
+			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Error deleting merchant: " + err.Error()})
+		}
+		deleted++
+	}
+
+	if err = s.Commit(); err != nil {
+		return handler.HandleHTTPError(err)
+	}
+
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"deleted": deleted,
+	})
+}
+
+// swagger:route GET /merchants merchant listMerchants
+// Lists all merchants for the current user.
+// responses:
+//   200: merchantList
+//   401: HTTPError
+//   500: HTTPError
+
+// swagger:route POST /merchants merchant createMerchant
+// Creates a new merchant.
+// responses:
+//   200: merchant
+//   400: HTTPError
+//   401: HTTPError
+//   500: HTTPError
+
+// swagger:route GET /merchants/{merchant} merchant getMerchant
+// Gets a merchant by its ID.
+// responses:
+//   200: merchant
+//   401: HTTPError
+//   404: HTTPError
+//   500: HTTPError
+
+// swagger:route POST /merchants/{merchant} merchant updateMerchant
+// Updates a merchant by its ID.
+// responses:
+//   200: merchant
+//   400: HTTPError
+//   401: HTTPError
+//   404: HTTPError
+//   500: HTTPError
+
+// swagger:route DELETE /merchants/{merchant} merchant deleteMerchant
+// Deletes a merchant by its ID.
+// responses:
+//   200: HTTPSuccess
+//   401: HTTPError
+//   404: HTTPError
+//   500: HTTPError
+
+// swagger:route PUT /merchants/import merchant importMerchants
+// Imports merchants from an XLSX file.
+// responses:
+//   200: merchantList
+//   400: HTTPError
+//   401: HTTPError
+//   500: HTTPError

@@ -1,36 +1,40 @@
 import AbstractService from './abstractService'
 import MerchantModel from '@/models/merchant'
 import type {IMerchant} from '@/modelTypes/IMerchant'
-import axios from 'axios'
-import {getToken} from '@/helpers/auth'
 
 export default class MerchantService extends AbstractService<IMerchant> {
 	constructor() {
 		super({
-			getAll: '/merchants',
 			create: '/merchants',
+			getAll: '/merchants',
 			get: '/merchants/{id}',
 			update: '/merchants/{id}',
 			delete: '/merchants/{id}',
 		})
 	}
 
-	modelFactory(data: Partial<IMerchant>) {
+	modelFactory(data) {
 		return new MerchantModel(data)
 	}
 
-	async importFromXlsx(file: File, headerMapping: Record<string, string> = {}): Promise<IMerchant[]> {
-		const formData = new FormData()
-		formData.append('file', file)
+	beforeUpdate(merchant) {
+		return merchant
+	}
 
-		// Convert header mapping to JSON and append it to the form data
-		formData.append('headerMapping', JSON.stringify(headerMapping))
+	beforeCreate(merchant) {
+		return merchant
+	}
 
-		// Use the parent's uploadFormData method which properly handles multipart/form-data
-		const response = await this.uploadFormData('/merchants/import', formData)
-
-		// Backend responds with { message, count, merchants }
-		const data = response && response.merchants ? response.merchants : response
-		return (Array.isArray(data) ? data : []).map((merchant: IMerchant) => this.modelFactory(merchant))
+	/**
+	 * Bulk delete merchants by ids
+	 */
+	async bulkDelete(ids: number[]) {
+		const cancel = this.setLoading()
+		try {
+			const response = await this.http.post('/merchants/bulk_delete', { ids })
+			return response.data
+		} finally {
+			cancel()
+		}
 	}
 }

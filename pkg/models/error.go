@@ -2048,19 +2048,19 @@ func (err *ErrOpenIDBadRequestWithDetails) Error() string {
 // Merchant
 // ========
 
-// ErrMerchantDoesNotExist represents a "MerchantDoesNotExist" kind of error. Used if the merchant does not exist.
+// Merchant errors
 type ErrMerchantDoesNotExist struct {
 	MerchantID int64
+}
+
+func (e ErrMerchantDoesNotExist) Error() string {
+	return fmt.Sprintf("Merchant with id %d does not exist", e.MerchantID)
 }
 
 // IsErrMerchantDoesNotExist checks if an error is a ErrMerchantDoesNotExist.
 func IsErrMerchantDoesNotExist(err error) bool {
 	_, ok := err.(ErrMerchantDoesNotExist)
 	return ok
-}
-
-func (err ErrMerchantDoesNotExist) Error() string {
-	return fmt.Sprintf("Merchant does not exist [Merchant ID: %d]", err.MerchantID)
 }
 
 // ErrCodeMerchantDoesNotExist holds the unique world-error code of this error
