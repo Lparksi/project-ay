@@ -14,6 +14,10 @@ import './registerServiceWorker'
 // i18n
 import {getBrowserLanguage, i18n, setLanguage} from './i18n'
 
+// TDesign
+import TDesign from 'tdesign-vue-next'
+import 'tdesign-vue-next/dist/tdesign.css'
+
 declare global {
 	interface Window {
 		API_URL: string;
@@ -110,6 +114,7 @@ setLanguage(browserLanguage).then(() => {
 	app.use(pinia)
 	app.use(router)
 	app.use(i18n)
+	app.use(TDesign)
 
 	app.mount('#app')
 })

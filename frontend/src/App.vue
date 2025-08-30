@@ -46,6 +46,7 @@ import {useBaseStore} from '@/stores/base'
 
 import {useColorScheme} from '@/composables/useColorScheme'
 import {useBodyClass} from '@/composables/useBodyClass'
+import {useTDesignTheme} from '@/composables/useTDesignTheme'
 import AddToHomeScreen from '@/components/home/AddToHomeScreen.vue'
 import DemoMode from '@/components/home/DemoMode.vue'
 
@@ -90,6 +91,7 @@ watch(userEmailConfirm, (userEmailConfirm) => {
 
 setLanguage(authStore.settings.language)
 useColorScheme()
+useTDesignTheme()
 </script>
 
 <style lang="scss" src="@/styles/global.scss" />

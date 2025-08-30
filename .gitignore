@@ -48,3 +48,6 @@ PLAN.md
 /.crush/
 
 db
+*.md
+
+*.exe

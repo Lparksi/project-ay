@@ -80,6 +80,16 @@
 						{{ $t('navigation.map') }}
 					</RouterLink>
 				</li>
+				<li>
+					<RouterLink
+						:to="{ name: 'merchant' }"
+					>
+						<span class="menu-item-icon icon">
+							<Icon icon="store" />
+						</span>
+						{{ $t('navigation.merchant') }}
+					</RouterLink>
+				</li>
 			</menu>
 		</nav>
 

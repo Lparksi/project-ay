@@ -217,6 +217,8 @@ func CollectRoutesForAPITokenUsage(route echo.Route, middlewares []echo.Middlewa
 // @Summary Get a list of all token api routes
 // @Description Returns a list of all API routes which are available to use with an api token, not a user login.
 // @tags api
+// @tag.name merchant
+// @tag.description Merchant management
 // @Produce json
 // @Security JWTKeyAuth
 // @Success 200 {array} models.APITokenRoute "The list of all routes."

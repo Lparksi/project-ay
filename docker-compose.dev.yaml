@@ -13,6 +13,8 @@ services:
       - 3456:3456
     volumes:
       - ./files:/app/vikunja/files
+      - ./frontend/src:/app/vikunja/frontend/src  # 添加源码映射
+      - ./frontend/dist:/app/vikunja/frontend/dist  # 添加构建输出映射
     depends_on:
       db:
         condition: service_healthy

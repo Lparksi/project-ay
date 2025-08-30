@@ -393,6 +393,11 @@ const router = createRouter({
 			name: 'map',
 			component: () => import('@/views/Map.vue'),
 		},
+		{
+			path: '/merchant',
+			name: 'merchant',
+			component: () => import('@/views/Merchant.vue'),
+		},
 	],
 })
 

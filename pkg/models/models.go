@@ -65,6 +65,7 @@ func GetTables() []interface{} {
 		&ProjectView{},
 		&TaskPosition{},
 		&TaskBucket{},
+		&Merchant{},
 	}
 }
 
@@ -88,7 +89,14 @@ func getLimitFromPageIndex(page int, perPage int) (limit, start int) {
 
 	limit = config.ServiceMaxItemsPerPage.GetInt()
 	if perPage > 0 {
-		limit = perPage
+		// Allow up to 500 items per page for better data browsing experience
+		// while still maintaining reasonable performance
+		maxAllowedLimit := 500
+		if perPage > maxAllowedLimit {
+			limit = maxAllowedLimit
+		} else {
+			limit = perPage
+		}
 	}
 
 	start = limit * (page - 1)
