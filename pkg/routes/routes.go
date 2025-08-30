@@ -497,6 +497,9 @@ func registerAPIRoutes(a *echo.Group) {
 	// Merchant routes
 	registerMerchantRoutes(a)
 
+	// Merchant mapping routes
+	registerMerchantMappingRoutes(a)
+
 	projectTeamHandler := &handler.WebHandler{
 		EmptyStruct: func() handler.CObject {
 			return &models.TeamProject{}

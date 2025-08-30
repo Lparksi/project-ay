@@ -61,8 +61,8 @@ func (c *WebHandler) ReadAllWeb(ctx echo.Context) error {
 		log.Error(err.Error())
 		return echo.NewHTTPError(http.StatusBadRequest, "Bad page requested.").SetInternal(err)
 	}
-	if pageNumber < 0 {
-		return echo.NewHTTPError(http.StatusBadRequest, "Page number cannot be negative.")
+	if pageNumber < -1 {
+		return echo.NewHTTPError(http.StatusBadRequest, "Page number cannot be less than -1.")
 	}
 
 	// Items per page
@@ -84,8 +84,15 @@ func (c *WebHandler) ReadAllWeb(ctx echo.Context) error {
 	if perPageNumber < 1 {
 		return echo.NewHTTPError(http.StatusBadRequest, "Per page amount cannot be negative.")
 	}
-	if perPageNumber > vconfig.ServiceMaxItemsPerPage.GetInt() {
-		perPageNumber = vconfig.ServiceMaxItemsPerPage.GetInt()
+	// Allow up to 500 items per page for better data browsing experience
+	// This is handled in getLimitFromPageIndex to maintain consistency
+	// Special case: when page is -1, allow unlimited items for frontend pagination
+	maxAllowedPerPage := 500
+	if pageNumber == -1 {
+		// For page -1, we want to return all items, so don't limit perPageNumber
+		// The actual limiting is handled in the model's ReadAll method
+	} else if perPageNumber > maxAllowedPerPage {
+		perPageNumber = maxAllowedPerPage
 	}
 
 	// Create the db session

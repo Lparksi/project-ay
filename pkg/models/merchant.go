@@ -137,21 +137,32 @@ func (m *Merchant) ReadOne(s *xorm.Session, auth web.Auth) (err error) {
 func (m *Merchant) ReadAll(s *xorm.Session, auth web.Auth, search string, page int, perPage int) (interface{}, int, int64, error) {
 	query := s.Where("owner_id = ?", auth.GetID())
 
-	if search != "" {
-		query = query.And("title LIKE ?", "%"+search+"%")
+	// Enhanced search functionality - only apply if search is provided
+	// When page is -1, we skip search filtering to load all data for frontend filtering
+	if search != "" && page != -1 {
+		// Search in multiple fields for better user experience
+		searchPattern := "%" + search + "%"
+		query = query.And(
+			"(title LIKE ? OR legal_representative LIKE ? OR business_address LIKE ? OR business_district LIKE ?)",
+			searchPattern, searchPattern, searchPattern, searchPattern,
+		)
 	}
 
-	limit, start := getLimitFromPageIndex(page, perPage)
-
-	// Get total count
+	// Get total count before applying limit
 	totalItems, err := query.Count(&Merchant{})
 	if err != nil {
 		return nil, 0, 0, err
 	}
 
+	// Apply pagination only if page is not -1
+	if page != -1 {
+		limit, start := getLimitFromPageIndex(page, perPage)
+		query = query.Limit(limit, start)
+	}
+
 	// Get merchants
 	merchants := []*Merchant{}
-	err = query.Limit(limit, start).OrderBy("created DESC").Find(&merchants)
+	err = query.OrderBy("created DESC").Find(&merchants)
 	if err != nil {
 		return nil, 0, 0, err
 	}
@@ -264,8 +275,9 @@ type LabelMapping struct {
 
 // ApplyLabelReplacements applies field-specific label replacements to merchant fields
 func (m *Merchant) ApplyLabelReplacements(s *xorm.Session) error {
+	// If CustomFilters is empty, try to load from database mappings
 	if m.CustomFilters == "" {
-		return nil
+		return m.ApplyDatabaseMappings(s)
 	}
 
 	// Try to parse as new field-specific format first
@@ -276,8 +288,8 @@ func (m *Merchant) ApplyLabelReplacements(s *xorm.Session) error {
 		var legacyMappings []LabelMapping
 		err = json.Unmarshal([]byte(m.CustomFilters), &legacyMappings)
 		if err != nil {
-			// If both formats fail, just return without error
-			return nil
+			// If both formats fail, try database mappings
+			return m.ApplyDatabaseMappings(s)
 		}
 		// Apply legacy format (same mappings to all fields)
 		m.applyLegacyLabelReplacements(s, legacyMappings)
@@ -311,6 +323,42 @@ func (m *Merchant) ApplyLabelReplacements(s *xorm.Session) error {
 			m.TrafficConditions = applyReplacements(m.TrafficConditions, replacements)
 		case "fixedEvents":
 			m.FixedEvents = applyReplacements(m.FixedEvents, replacements)
+		case "specialTimePeriods":
+			m.SpecialTimePeriods = applyReplacements(m.SpecialTimePeriods, replacements)
+		}
+	}
+
+	return nil
+}
+
+// ApplyDatabaseMappings loads and applies mappings from the database
+func (m *Merchant) ApplyDatabaseMappings(s *xorm.Session) error {
+	// Get all active mappings for the merchant owner
+	mappingsMap, err := GetAllMerchantMappingsByUser(s, m.OwnerID)
+	if err != nil {
+		return err
+	}
+
+	// Apply mappings for each field
+	for fieldName, mappings := range mappingsMap {
+		replacements := make(map[string]string)
+		for _, mapping := range mappings {
+			if mapping.Placeholder == "" {
+				continue
+			}
+			replacements[mapping.Placeholder] = mapping.DisplayText
+		}
+
+		// Apply replacements to the specific field
+		switch fieldName {
+		case "validTime":
+			m.ValidTime = applyReplacements(m.ValidTime, replacements)
+		case "trafficConditions":
+			m.TrafficConditions = applyReplacements(m.TrafficConditions, replacements)
+		case "fixedEvents":
+			m.FixedEvents = applyReplacements(m.FixedEvents, replacements)
+		case "terminalType":
+			m.TerminalType = applyReplacements(m.TerminalType, replacements)
 		case "specialTimePeriods":
 			m.SpecialTimePeriods = applyReplacements(m.SpecialTimePeriods, replacements)
 		}
@@ -562,7 +610,7 @@ type createMerchantParams struct {
 	// The merchant to create
 	// in: body
 	// required: true
-	Body Merchant
+	Merchant Merchant `json:"merchant"`
 }
 
 // swagger:parameters getMerchant updateMerchant deleteMerchant
@@ -578,7 +626,7 @@ type updateMerchantParams struct {
 	// The merchant update
 	// in: body
 	// required: true
-	Body Merchant
+	Merchant Merchant `json:"merchantUpdate"`
 }
 
 // swagger:parameters importMerchants
@@ -586,7 +634,7 @@ type importMerchantsParams struct {
 	// XLSX file to import
 	// in: formData
 	// required: true
-	File *multipart.FileHeader `json:"file"`
+	File multipart.FileHeader `json:"file"`
 }
 
 // swagger:response merchantList

@@ -6,6 +6,7 @@ import type {IUser} from './IUser'
  */
 export interface ILabelMapping {
 	placeholder: string
+	displayText: string
 	labelId: number
 }
 
@@ -15,6 +16,20 @@ export interface ILabelMapping {
 export interface IFieldLabelMapping {
 	field: string
 	mappings: ILabelMapping[]
+}
+
+/**
+ * Merchant mapping for persistence
+ */
+export interface IMerchantMapping extends IAbstract {
+	id: number
+	fieldName: string
+	placeholder: string
+	displayText: string
+	labelId: number
+	isActive: boolean
+	created: Date
+	updated: Date
 }
 
 /**

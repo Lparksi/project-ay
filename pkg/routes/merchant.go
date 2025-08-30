@@ -180,6 +180,13 @@ func merchantImport(c echo.Context) error {
 			merchant.CustomFilters = row[pos]
 		}
 
+		// Apply database mappings to imported data
+		err = merchant.ApplyDatabaseMappings(s)
+		if err != nil {
+			fmt.Printf("Warning: Failed to apply mappings for merchant at row %d: %v\n", i+2, err)
+			// Continue with import even if mappings fail
+		}
+
 		// Set title as a combination of key fields or use a default
 		title := merchant.LegalRepresentative
 		if title == "" {
