@@ -252,8 +252,8 @@ importers:
         specifier: 10.4.0
         version: 10.4.0(@typescript-eslint/parser@8.40.0(eslint@9.33.0(jiti@2.4.2))(typescript@5.9.2))(eslint@9.33.0(jiti@2.4.2))(vue-eslint-parser@10.2.0(eslint@9.33.0(jiti@2.4.2)))
       happy-dom:
-        specifier: 18.0.1
-        version: 18.0.1
+        specifier: 20.0.2
+        version: 20.0.2
       histoire:
         specifier: 1.0.0-alpha.3
         version: 1.0.0-alpha.3(@types/node@22.17.2)(sass-embedded@1.90.0)(sass@1.90.0)(terser@5.31.6)(vite@7.1.2(@types/node@22.17.2)(jiti@2.4.2)(sass-embedded@1.90.0)(sass@1.90.0)(terser@5.31.6)(yaml@2.5.0))(yaml@2.5.0)
@@ -316,7 +316,7 @@ importers:
         version: 5.1.0(vue@3.5.18(typescript@5.9.2))
       vitest:
         specifier: 3.2.4
-        version: 3.2.4(@types/node@22.17.2)(happy-dom@18.0.1)(jiti@2.4.2)(jsdom@25.0.1)(sass-embedded@1.90.0)(sass@1.90.0)(terser@5.31.6)(yaml@2.5.0)
+        version: 3.2.4(@types/node@22.17.2)(happy-dom@20.0.2)(jiti@2.4.2)(jsdom@25.0.1)(sass-embedded@1.90.0)(sass@1.90.0)(terser@5.31.6)(yaml@2.5.0)
       vue-tsc:
         specifier: 3.0.5
         version: 3.0.5(typescript@5.9.2)
@@ -2293,8 +2293,8 @@ packages:
   '@types/minimist@1.2.5':
     resolution: {integrity: sha512-hov8bUuiLiyFPGyFPE1lwWhmzYbirOXQNNo40+y3zow8aFVTeyn3VWL0VFFfdNddA8S4Vf0Tc062rzyNr7Paag==}
 
-  '@types/node@20.19.0':
-    resolution: {integrity: sha512-hfrc+1tud1xcdVTABC2JiomZJEklMcXYNTVtZLAeqTVWD+qL5jkHKT+1lOtqDdGxt+mB53DTtiz673vfjU8D1Q==}
+  '@types/node@20.19.21':
+    resolution: {integrity: sha512-CsGG2P3I5y48RPMfprQGfy4JPRZ6csfC3ltBZSRItG3ngggmNY/qs2uZKp4p9VbrpqNNSMzUZNFZKzgOGnd/VA==}
 
   '@types/node@22.17.2':
     resolution: {integrity: sha512-gL6z5N9Jm9mhY+U2KXZpteb+09zyffliRkZyZOHODGATyC5B1Jt/7TzuuiLkFsSUMLbS1OLmlj/E+/3KF4Q/4w==}
@@ -3999,8 +3999,8 @@ packages:
     resolution: {integrity: sha512-5v6yZd4JK3eMI3FqqCouswVqwugaA9r4dNZB1wwcmrD02QkV5H0y7XBQW8QwQqEaZY1pM9aqORSORhJRdNK44Q==}
     engines: {node: '>=6.0'}
 
-  happy-dom@18.0.1:
-    resolution: {integrity: sha512-qn+rKOW7KWpVTtgIUi6RVmTBZJSe2k0Db0vh1f7CWrWclkkc7/Q+FrOfkZIb2eiErLyqu5AXEzE7XthO9JVxRA==}
+  happy-dom@20.0.2:
+    resolution: {integrity: sha512-pYOyu624+6HDbY+qkjILpQGnpvZOusItCk+rvF5/V+6NkcgTKnbOldpIy22tBnxoaLtlM9nXgoqAcW29/B7CIw==}
     engines: {node: '>=20.0.0'}
 
   hard-rejection@2.1.0:
@@ -5492,7 +5492,7 @@ packages:
   puppeteer@23.11.1:
     resolution: {integrity: sha512-53uIX3KR5en8l7Vd8n5DUv90Ae9QDQsyIthaUFVzwV6yU750RjqRznEtNMBT20VthqAdemnJN+hxVdmMHKt7Zw==}
     engines: {node: '>=18'}
-    deprecated: < 24.9.0 is no longer supported
+    deprecated: < 24.15.0 is no longer supported
     hasBin: true
 
   qs@6.14.0:
@@ -9114,7 +9114,7 @@ snapshots:
 
   '@types/minimist@1.2.5': {}
 
-  '@types/node@20.19.0':
+  '@types/node@20.19.21':
     dependencies:
       undici-types: 6.21.0
 
@@ -11157,9 +11157,9 @@ snapshots:
       section-matter: 1.0.0
       strip-bom-string: 1.0.0
 
-  happy-dom@18.0.1:
+  happy-dom@20.0.2:
     dependencies:
-      '@types/node': 20.19.0
+      '@types/node': 20.19.21
       '@types/whatwg-mimetype': 3.0.2
       whatwg-mimetype: 3.0.0
 
@@ -14001,7 +14001,7 @@ snapshots:
       terser: 5.31.6
       yaml: 2.5.0
 
-  vitest@3.2.4(@types/node@22.17.2)(happy-dom@18.0.1)(jiti@2.4.2)(jsdom@25.0.1)(sass-embedded@1.90.0)(sass@1.90.0)(terser@5.31.6)(yaml@2.5.0):
+  vitest@3.2.4(@types/node@22.17.2)(happy-dom@20.0.2)(jiti@2.4.2)(jsdom@25.0.1)(sass-embedded@1.90.0)(sass@1.90.0)(terser@5.31.6)(yaml@2.5.0):
     dependencies:
       '@types/chai': 5.2.2
       '@vitest/expect': 3.2.4
@@ -14028,7 +14028,7 @@ snapshots:
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/node': 22.17.2
-      happy-dom: 18.0.1
+      happy-dom: 20.0.2
       jsdom: 25.0.1
     transitivePeerDependencies:
       - jiti
